@@ -4,7 +4,7 @@ module Explo exposing (..)
 type ExploState
     = NoExplo
     | ExploInProgress Zone Float
-    | ExploComplete Zone
+    | ExploComplete Zone Quest
 
 
 type alias Zone = 
@@ -28,10 +28,10 @@ updateExplo explo acc =
                 new_progress = min (progress + zone.explo_rate) 100
             in
                 if new_progress == 100 then
-                    (ExploComplete zone, 0)
+                    (ExploComplete zone createWolfQuest, 0)
                 else updateExplo (ExploInProgress zone new_progress) (acc - exploTick)
             else (explo, acc)
-        ExploComplete zone -> (explo, 0)
+        ExploComplete zone q -> (explo, 0)
 
 
 
@@ -69,6 +69,8 @@ incrementQuest quest monster_type =
     if quest.monster_type == monster_type then { quest | remaining = quest.remaining + 1 }
     else quest
 
-updateQuests : List Quest -> List Quest
-updateQuests quests = 
-    List.map (\x -> incrementQuest x Wolf) quests
+addQuest : List Quest -> Quest -> List Quest
+addQuest quests q = 
+    if (List.any (\x -> x.monster_type == q.monster_type) quests) then
+        List.map (\x -> incrementQuest x q.monster_type) quests
+    else (quests ++ [q])

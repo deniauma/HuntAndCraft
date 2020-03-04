@@ -31,6 +31,7 @@ type Msg
     = Frame Float
     | StartExplo
     | ExploProgress
+    | CancelExplo
     | StartBattle
 
 
@@ -51,11 +52,12 @@ update msg model =
                 (new_battle, new_battle_acc) = updateBattle model.battle (model.accumulator + delta)
             in
                 case new_explo of
-                    ExploComplete z -> ({ model | exploration = ExploInProgress z 0, explo_accumulator = new_explo_acc, quests = model.quests ++ [createWolfQuest], battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
+                    ExploComplete z q -> ({ model | exploration = ExploInProgress z 0, explo_accumulator = new_explo_acc, quests = addQuest model.quests q, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
                     _ -> ({ model | exploration = new_explo, explo_accumulator = new_explo_acc, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
         StartBattle -> ({ model | battle = PlayerTurn model.player_stats monster_stats, exploration = NoExplo }, Cmd.none)
         StartExplo -> ( { model | exploration = ExploInProgress zone1 0, explo_accumulator = 0, battle = NoBattle }, Cmd.none )
         ExploProgress -> ( model, Cmd.none )
+        CancelExplo -> ( { model | exploration = NoExplo, explo_accumulator = 0 }, Cmd.none )
 
 
 
@@ -75,14 +77,19 @@ viewExploration explo =
         ExploInProgress _ progress -> 
             div [] [ p [] [ text "Progress ... ", 
                 span [] [ text (String.fromFloat progress ++ "%")], 
-                button [] [ text "Cancel" ] ] ]
+                button [onClick CancelExplo] [ text "Cancel" ] ] ]
         NoExplo -> div [] [ text "No exploration in progress.", button [ onClick StartExplo ] [ text "Start exploring" ] ]
-        ExploComplete zone -> div [] [ text ("Exploration of " ++ zone.name ++ " is complete.") ]
+        ExploComplete zone q -> div [] [ text ("Exploration of " ++ zone.name ++ " is complete.") ]
 
 
 viewQuest : Quest -> Html Msg
 viewQuest q = 
-    div [] [ span [] [ text ("Monster: " ++ monsterTypeToString q.monster_type) ] ]
+    div [] 
+        [ p [] [ text ("Monster: " ++ monsterTypeToString q.monster_type) ]
+        , p [] [ text ("Experience: " ++ String.fromInt q.exp) ]
+        , p [] [ text ("Gold: " ++ String.fromInt q.gold) ]
+        , p [] [ text ("Remaining: " ++ String.fromInt q.remaining) ]
+        ]
 
 viewQuests : List Quest -> Html Msg
 viewQuests quests =
