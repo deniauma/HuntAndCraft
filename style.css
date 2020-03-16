@@ -1,0 +1,33 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#quests {
+	grid-area: quests;
+}
+
+#explo {
+	grid-area: explo;
+}
+
+#battle {
+	grid-area: battle;
+	
+}
+
+#debug {
+	grid-area: debug;
+}
+
+#game {
+	display: grid;
+	grid-template-columns: : 1fr 2fr;
+	grid-auto-rows: 30vh 30vh 30vh 10vh;
+	grid-template-areas: 
+		"quests explo explo"
+		"quests battle battle"
+		"quests battle battle"
+		"debug debug debug"
+
+}
