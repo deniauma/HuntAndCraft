@@ -7,6 +7,15 @@ body {
 	grid-area: quests;
 }
 
+.quest-item:hover {
+	background-color: yellow;
+	cursor: pointer;
+}
+
+.quest-item > p {
+	margin: 0;
+}
+
 #explo {
 	grid-area: explo;
 }
@@ -22,12 +31,23 @@ body {
 
 #game {
 	display: grid;
-	grid-template-columns: : 1fr 2fr;
-	grid-auto-rows: 30vh 30vh 30vh 10vh;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 30vh 30vh 30vh 10vh;
 	grid-template-areas: 
 		"quests explo explo"
 		"quests battle battle"
 		"quests battle battle"
 		"debug debug debug"
 
+}
+
+.progress {
+	height: 20px;
+	width: 200px;
+	background-color: grey;
+}
+
+.progress-current {
+	background-color: red;
+	height: inherit;
 }

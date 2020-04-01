@@ -2,8 +2,8 @@ module Game exposing (main)
 
 import Browser
 import Browser.Events exposing (onAnimationFrameDelta)
-import Html exposing (Html, button, div, text, h2, h3, span, p)
-import Html.Attributes exposing (id, class)
+import Html exposing (Html, button, div, text, h2, h3, span, p, br)
+import Html.Attributes exposing (id, class, style)
 import Html.Events exposing (onClick)
 import Explo exposing (..)
 import Battle exposing (..)
@@ -14,6 +14,7 @@ type alias Model =
     , explo_accumulator: Float
     , exploration : ExploState
     , quests : List Quest
+    , current_quest : Maybe Quest
     , battle : BattleState
     , player_stats : FightingStats }
 
@@ -22,7 +23,8 @@ init _ =
     ( { accumulator = 0 
     , explo_accumulator = 0
     , exploration = NoExplo
-    , quests = []
+    , quests = [ createWolfQuest ]
+    , current_quest = Nothing
     , battle = NoBattle
     , player_stats = FightingStats 300 300 10 0 }, Cmd.none )
 
@@ -33,6 +35,7 @@ type Msg
     | ExploProgress
     | CancelExplo
     | StartBattle
+    | SelectQuest Quest
 
 
 subscriptions _ =
@@ -54,10 +57,17 @@ update msg model =
                 case new_explo of
                     ExploComplete z q -> ({ model | exploration = ExploInProgress z 0, explo_accumulator = new_explo_acc, quests = addQuest model.quests q, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
                     _ -> ({ model | exploration = new_explo, explo_accumulator = new_explo_acc, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
-        StartBattle -> ({ model | battle = PlayerTurn model.player_stats monster_stats, exploration = NoExplo }, Cmd.none)
+        StartBattle -> 
+            let
+                new_quests = case model.current_quest of
+                    Just q -> removeQuest model.quests q
+                    Nothing -> model.quests
+            in
+                ({ model | battle = PlayerTurn model.player_stats monster_stats, exploration = NoExplo, quests = new_quests }, Cmd.none)
         StartExplo -> ( { model | exploration = ExploInProgress zone1 0, explo_accumulator = 0, battle = NoBattle }, Cmd.none )
         ExploProgress -> ( model, Cmd.none )
         CancelExplo -> ( { model | exploration = NoExplo, explo_accumulator = 0 }, Cmd.none )
+        SelectQuest q -> ( { model | current_quest = Just q }, Cmd.none)
 
 
 
@@ -65,9 +75,9 @@ view model =
     div [ id "game"]
         [ div [ id "quests"]  [ h2 [] [ text "Quests" ], viewQuests model.quests ]
         , div [ id "explo" ] [ h2 [] [ text "Exploration" ], viewExploration model.exploration ]
-        , div [ id "battle" ] [ h2 [] [ text "Fight monster" ]
-            , viewPlayerStats model.player_stats model.battle
-            , viewMonsterStats model.battle, button [ onClick StartBattle ] [ text "Fight!" ] ]
+        , div [ id "battle" ] [ h2 [] [ text "Battle" ]
+            , viewBattle model
+            ]
         , div [ id "debug" ] [ viewDebug model ]
         ]
 
@@ -75,16 +85,19 @@ viewExploration : ExploState -> Html Msg
 viewExploration explo =
     case explo of
         ExploInProgress _ progress -> 
-            div [] [ p [] [ text "Progress ... ", 
-                span [] [ text (String.fromFloat progress ++ "%")], 
-                button [onClick CancelExplo] [ text "Cancel" ] ] ]
-        NoExplo -> div [] [ text "No exploration in progress.", button [ onClick StartExplo ] [ text "Start exploring" ] ]
+            div [] 
+                [ p [] [ text "Progress ... "
+                , span [] [ text (String.fromFloat progress ++ "%")]
+                , div [ class "progress" ] [ div [ class "progress-current", style "width" (String.fromFloat progress ++ "%") ] [] ]
+                , button [onClick CancelExplo] [ text "Cancel" ] ] 
+                ]
+        NoExplo -> div [] [ text "No exploration in progress.", br [] [], button [ onClick StartExplo ] [ text "Start exploring" ] ]
         ExploComplete zone q -> div [] [ text ("Exploration of " ++ zone.name ++ " is complete.") ]
 
 
 viewQuest : Quest -> Html Msg
 viewQuest q = 
-    div [] 
+    div [ class "quest-item", onClick (SelectQuest q) ] 
         [ p [] [ text ("Monster: " ++ monsterTypeToString q.monster_type) ]
         , p [] [ text ("Experience: " ++ String.fromInt q.exp) ]
         , p [] [ text ("Gold: " ++ String.fromInt q.gold) ]
@@ -95,8 +108,32 @@ viewQuests : List Quest -> Html Msg
 viewQuests quests =
     div [] (List.map viewQuest quests)
 
-viewMonsterStats : BattleState -> Html Msg
-viewMonsterStats state =
+viewBattle : Model -> Html Msg
+viewBattle model =
+    case model.current_quest of
+        Nothing -> div [][]
+        Just quest -> div [] 
+                        [ viewPlayerStats model.player_stats model.battle
+                        , viewMonsterStats model.battle (monsterTypeToString quest.monster_type), button [ onClick StartBattle ] [ text "Fight!" ]
+                        ]
+
+viewMonsterStats : BattleState -> String -> Html Msg
+viewMonsterStats state name =
+    case state of
+        NoBattle -> div [][]
+        PlayerTurn _ m -> viewMonsterLife m name
+        MonsterTurn _ m -> viewMonsterLife m name
+        Win _ m -> viewMonsterLife m name
+        Lose _ m -> viewMonsterLife m name
+
+viewMonsterLife : FightingStats -> String -> Html Msg
+viewMonsterLife m name =
+    div []
+        [ p [] [ text name ]
+        , span [] [ text (String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp) ]
+        ]
+
+oldViewMonsterStats state =
     let 
         output_text = case state of
             NoBattle -> ""

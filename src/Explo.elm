@@ -39,19 +39,8 @@ type MonsterType
     = Wolf
     | Boar
 
-type MonsterDrop
-    = Fur
-    | Tail
-    | Fang
-    | Tooth
-    | Bone
-
-wolfDrops = [Fur, Tail, Fang]
-boarDrops = [Fur, Tooth, Bone]
-
 type alias Quest = 
     { monster_type : MonsterType
-    , drops :  List MonsterDrop
     , remaining: Int
     , exp : Int
     , gold : Int }
@@ -62,11 +51,16 @@ monsterTypeToString m =
         Boar -> "Boar"
 
 createWolfQuest : Quest
-createWolfQuest = Quest Wolf wolfDrops 1 10 50
+createWolfQuest = Quest Wolf 1 10 50
 
 incrementQuest : Quest -> MonsterType -> Quest
 incrementQuest quest monster_type =
     if quest.monster_type == monster_type then { quest | remaining = quest.remaining + 1 }
+    else quest
+
+decrementQuest : Quest -> MonsterType -> Quest
+decrementQuest quest monster_type =
+    if quest.monster_type == monster_type then { quest | remaining = quest.remaining - 1 }
     else quest
 
 addQuest : List Quest -> Quest -> List Quest
@@ -74,3 +68,9 @@ addQuest quests q =
     if (List.any (\x -> x.monster_type == q.monster_type) quests) then
         List.map (\x -> incrementQuest x q.monster_type) quests
     else (quests ++ [q])
+
+removeQuest : List Quest -> Quest -> List Quest
+removeQuest quests q =
+    if (List.any (\x -> x.monster_type == q.monster_type) quests) then
+        List.map (\x -> decrementQuest x q.monster_type) quests
+    else quests
