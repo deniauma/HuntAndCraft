@@ -35,6 +35,8 @@ type Msg
     | ExploProgress
     | CancelExplo
     | StartBattle
+    | EndQuestWithRewards
+    | EndQuestNoRewards
     | SelectQuest Quest
 
 
@@ -45,7 +47,6 @@ subscriptions _ =
 exploTick = 100
 battleTick = 500
 
-monster_stats = FightingStats 200 200 20 0
 
 update msg model =
     case msg of
@@ -53,21 +54,34 @@ update msg model =
             let
                 (new_explo, new_explo_acc) = updateExplo model.exploration (model.explo_accumulator + delta)
                 (new_battle, new_battle_acc) = updateBattle model.battle (model.accumulator + delta)
+                new_current_quest = case model.battle of
+                    Win _ _ -> Nothing
+                    Lose _ _  -> Nothing
+                    _ -> model.current_quest
             in
                 case new_explo of
-                    ExploComplete z q -> ({ model | exploration = ExploInProgress z 0, explo_accumulator = new_explo_acc, quests = addQuest model.quests q, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
-                    _ -> ({ model | exploration = new_explo, explo_accumulator = new_explo_acc, battle = new_battle, accumulator = new_battle_acc }, Cmd.none)
+                    ExploComplete z q -> ({ model | exploration = ExploInProgress z 0
+                        , explo_accumulator = new_explo_acc
+                        , quests = addQuest model.quests q
+                        , battle = new_battle
+                        , accumulator = new_battle_acc }, Cmd.none)
+                    _ -> ({ model | exploration = new_explo
+                        , explo_accumulator = new_explo_acc
+                        , battle = new_battle
+                        , accumulator = new_battle_acc }, Cmd.none)
         StartBattle -> 
             let
-                new_quests = case model.current_quest of
-                    Just q -> removeQuest model.quests q
-                    Nothing -> model.quests
+                (new_quests, monster_stats) = case model.current_quest of
+                    Just q -> ((removeQuest model.quests q), (getMonsterStats q)) 
+                    Nothing -> (model.quests, FightingStats 200 200 20 0)
             in
                 ({ model | battle = PlayerTurn model.player_stats monster_stats, exploration = NoExplo, quests = new_quests }, Cmd.none)
         StartExplo -> ( { model | exploration = ExploInProgress zone1 0, explo_accumulator = 0, battle = NoBattle }, Cmd.none )
         ExploProgress -> ( model, Cmd.none )
         CancelExplo -> ( { model | exploration = NoExplo, explo_accumulator = 0 }, Cmd.none )
         SelectQuest q -> ( { model | current_quest = Just q }, Cmd.none)
+        EndQuestWithRewards -> ( { model | current_quest = Nothing }, Cmd.none )
+        EndQuestNoRewards -> ( { model | current_quest = Nothing }, Cmd.none )
 
 
 
@@ -114,7 +128,8 @@ viewBattle model =
         Nothing -> div [][]
         Just quest -> div [] 
                         [ viewPlayerStats model.player_stats model.battle
-                        , viewMonsterStats model.battle (monsterTypeToString quest.monster_type), button [ onClick StartBattle ] [ text "Fight!" ]
+                        , viewMonsterStats model.battle (monsterTypeToString quest.monster_type)
+                        , viewBattleButtons model.battle
                         ]
 
 viewMonsterStats : BattleState -> String -> Html Msg
@@ -133,25 +148,14 @@ viewMonsterLife m name =
         , span [] [ text (String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp) ]
         ]
 
-oldViewMonsterStats state =
-    let 
-        output_text = case state of
-            NoBattle -> ""
-            PlayerTurn _ m -> String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp
-            MonsterTurn _ m -> String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp
-            Win _ m -> String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp
-            Lose _ m -> String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp
-    in 
-        div []
-            [ p [] [ text "Monster" ], span [] [ text output_text ]
-            ]
-
 viewPlayerStats : FightingStats -> BattleState -> Html Msg
 viewPlayerStats player battle_state =
     let
         current_hp = case battle_state of
             PlayerTurn p m -> p.hp
             MonsterTurn p m -> p.hp
+            Win p m -> p.hp
+            Lose p m -> p.hp
             _ -> player.hp
     in  
         div []
@@ -164,6 +168,14 @@ viewBattleOutcome battle_state =
         Win _ _ -> span [] [ text " - You win!" ]
         Lose _ _ -> span [] [ text " - You lose!" ]
         _ -> span [] []
+
+viewBattleButtons : BattleState -> Html Msg
+viewBattleButtons battle_state =
+    case battle_state of
+        NoBattle -> button [ onClick StartBattle ] [ text "Fight!" ]
+        Win _ _ -> button [ onClick EndQuestWithRewards ] [ text "End quest and get rewards" ]
+        Lose _ _ -> button [ onClick EndQuestNoRewards ] [ text "End quest (no rewards)" ] 
+        _ -> text ""
 
 viewDebug : Model -> Html Msg
 viewDebug model =

@@ -1,5 +1,7 @@
 module Explo exposing (..)
 
+import Battle exposing (FightingStats)
+
 
 type ExploState
     = NoExplo
@@ -53,6 +55,12 @@ monsterTypeToString m =
 createWolfQuest : Quest
 createWolfQuest = Quest Wolf 1 10 50
 
+getMonsterStats : Quest -> FightingStats
+getMonsterStats q = 
+    case q.monster_type of
+        Wolf -> FightingStats 200 200 20 0
+        Boar -> FightingStats 100 100 5 0
+
 incrementQuest : Quest -> MonsterType -> Quest
 incrementQuest quest monster_type =
     if quest.monster_type == monster_type then { quest | remaining = quest.remaining + 1 }
@@ -71,6 +79,10 @@ addQuest quests q =
 
 removeQuest : List Quest -> Quest -> List Quest
 removeQuest quests q =
-    if (List.any (\x -> x.monster_type == q.monster_type) quests) then
-        List.map (\x -> decrementQuest x q.monster_type) quests
-    else quests
+    let
+        new_quests = 
+            if (List.any (\x -> x.monster_type == q.monster_type) quests) then
+                List.map (\x -> decrementQuest x q.monster_type) quests
+            else quests
+    in
+        List.filter (\x -> x.remaining > 0) new_quests

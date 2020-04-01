@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.T.H === region.Y.H)
+	if (region.T.I === region.Y.I)
 	{
-		return 'on line ' + region.T.H;
+		return 'on line ' + region.T.I;
 	}
-	return 'on lines ' + region.T.H + ' through ' + region.Y.H;
+	return 'on lines ' + region.T.I + ' through ' + region.Y.I;
 }
 
 
@@ -2704,7 +2704,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		t: func(record.t),
+		u: func(record.u),
 		U: record.U,
 		R: record.R
 	}
@@ -2974,7 +2974,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.t;
+		var message = !tag ? value : tag < 3 ? value.a : value.u;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.U;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -5140,13 +5140,13 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Battle$FightingStats = F4(
 	function (hp, max_hp, atk, def) {
-		return {O: atk, aB: def, s: hp, ae: max_hp};
+		return {O: atk, aB: def, t: hp, ae: max_hp};
 	});
 var $author$project$Battle$NoBattle = {$: 0};
 var $author$project$Explo$NoExplo = {$: 0};
 var $author$project$Explo$Quest = F4(
 	function (monster_type, remaining, exp, gold) {
-		return {aE: exp, aG: gold, o: monster_type, I: remaining};
+		return {aE: exp, aG: gold, k: monster_type, E: remaining};
 	});
 var $author$project$Explo$Wolf = 0;
 var $author$project$Explo$createWolfQuest = A4($author$project$Explo$Quest, 0, 1, 10, 50);
@@ -5155,13 +5155,13 @@ var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Game$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			B: 0,
-			j: $author$project$Battle$NoBattle,
-			G: $elm$core$Maybe$Nothing,
-			r: 0,
-			m: $author$project$Explo$NoExplo,
+			C: 0,
+			g: $author$project$Battle$NoBattle,
+			r: $elm$core$Maybe$Nothing,
+			s: 0,
+			n: $author$project$Explo$NoExplo,
 			N: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
-			v: _List_fromArray(
+			w: _List_fromArray(
 				[$author$project$Explo$createWolfQuest])
 		},
 		$elm$core$Platform$Cmd$none);
@@ -5335,47 +5335,71 @@ var $elm$core$List$any = F2(
 	});
 var $author$project$Explo$incrementQuest = F2(
 	function (quest, monster_type) {
-		return _Utils_eq(quest.o, monster_type) ? _Utils_update(
+		return _Utils_eq(quest.k, monster_type) ? _Utils_update(
 			quest,
-			{I: quest.I + 1}) : quest;
+			{E: quest.E + 1}) : quest;
 	});
 var $author$project$Explo$addQuest = F2(
 	function (quests, q) {
 		return A2(
 			$elm$core$List$any,
 			function (x) {
-				return _Utils_eq(x.o, q.o);
+				return _Utils_eq(x.k, q.k);
 			},
 			quests) ? A2(
 			$elm$core$List$map,
 			function (x) {
-				return A2($author$project$Explo$incrementQuest, x, q.o);
+				return A2($author$project$Explo$incrementQuest, x, q.k);
 			},
 			quests) : _Utils_ap(
 			quests,
 			_List_fromArray(
 				[q]));
 	});
-var $author$project$Game$monster_stats = A4($author$project$Battle$FightingStats, 200, 200, 20, 0);
+var $author$project$Explo$getMonsterStats = function (q) {
+	var _v0 = q.k;
+	if (!_v0) {
+		return A4($author$project$Battle$FightingStats, 200, 200, 20, 0);
+	} else {
+		return A4($author$project$Battle$FightingStats, 100, 100, 5, 0);
+	}
+};
 var $author$project$Explo$decrementQuest = F2(
 	function (quest, monster_type) {
-		return _Utils_eq(quest.o, monster_type) ? _Utils_update(
+		return _Utils_eq(quest.k, monster_type) ? _Utils_update(
 			quest,
-			{I: quest.I - 1}) : quest;
+			{E: quest.E - 1}) : quest;
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
 	});
 var $author$project$Explo$removeQuest = F2(
 	function (quests, q) {
-		return A2(
+		var new_quests = A2(
 			$elm$core$List$any,
 			function (x) {
-				return _Utils_eq(x.o, q.o);
+				return _Utils_eq(x.k, q.k);
 			},
 			quests) ? A2(
 			$elm$core$List$map,
 			function (x) {
-				return A2($author$project$Explo$decrementQuest, x, q.o);
+				return A2($author$project$Explo$decrementQuest, x, q.k);
 			},
 			quests) : quests;
+		return A2(
+			$elm$core$List$filter,
+			function (x) {
+				return x.E > 0;
+			},
+			new_quests);
 	});
 var $author$project$Battle$Lose = F2(
 	function (a, b) {
@@ -5395,7 +5419,7 @@ var $author$project$Battle$updateFighterHP = F2(
 		return _Utils_update(
 			defender,
 			{
-				s: A2($elm$core$Basics$max, defender.s - attacker.O, 0)
+				t: A2($elm$core$Basics$max, defender.t - attacker.O, 0)
 			});
 	});
 var $author$project$Battle$updateBattle = F2(
@@ -5412,9 +5436,9 @@ var $author$project$Battle$updateBattle = F2(
 						var new_monster = _Utils_update(
 							monster,
 							{
-								s: A2($elm$core$Basics$max, monster.s - player.O, 0)
+								t: A2($elm$core$Basics$max, monster.t - player.O, 0)
 							});
-						if (!new_monster.s) {
+						if (!new_monster.t) {
 							var $temp$battle = A2($author$project$Battle$Win, player, new_monster),
 								$temp$acc = acc - 500;
 							battle = $temp$battle;
@@ -5435,7 +5459,7 @@ var $author$project$Battle$updateBattle = F2(
 					var monster = battle.b;
 					if (acc >= 500) {
 						var new_player = A2($author$project$Battle$updateFighterHP, monster, player);
-						if (!new_player.s) {
+						if (!new_player.t) {
 							var $temp$battle = A2($author$project$Battle$Lose, new_player, monster),
 								$temp$acc = acc - 500;
 							battle = $temp$battle;
@@ -5508,10 +5532,21 @@ var $author$project$Game$update = F2(
 		switch (msg.$) {
 			case 0:
 				var delta = msg.a;
-				var _v1 = A2($author$project$Explo$updateExplo, model.m, model.r + delta);
+				var new_current_quest = function () {
+					var _v4 = model.g;
+					switch (_v4.$) {
+						case 3:
+							return $elm$core$Maybe$Nothing;
+						case 4:
+							return $elm$core$Maybe$Nothing;
+						default:
+							return model.r;
+					}
+				}();
+				var _v1 = A2($author$project$Explo$updateExplo, model.n, model.s + delta);
 				var new_explo = _v1.a;
 				var new_explo_acc = _v1.b;
-				var _v2 = A2($author$project$Battle$updateBattle, model.j, model.B + delta);
+				var _v2 = A2($author$project$Battle$updateBattle, model.g, model.C + delta);
 				var new_battle = _v2.a;
 				var new_battle_acc = _v2.b;
 				if (new_explo.$ === 2) {
@@ -5521,37 +5556,43 @@ var $author$project$Game$update = F2(
 						_Utils_update(
 							model,
 							{
-								B: new_battle_acc,
-								j: new_battle,
-								r: new_explo_acc,
-								m: A2($author$project$Explo$ExploInProgress, z, 0),
-								v: A2($author$project$Explo$addQuest, model.v, q)
+								C: new_battle_acc,
+								g: new_battle,
+								s: new_explo_acc,
+								n: A2($author$project$Explo$ExploInProgress, z, 0),
+								w: A2($author$project$Explo$addQuest, model.w, q)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{B: new_battle_acc, j: new_battle, r: new_explo_acc, m: new_explo}),
+							{C: new_battle_acc, g: new_battle, s: new_explo_acc, n: new_explo}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 4:
-				var new_quests = function () {
-					var _v4 = model.G;
-					if (!_v4.$) {
-						var q = _v4.a;
-						return A2($author$project$Explo$removeQuest, model.v, q);
+				var _v5 = function () {
+					var _v6 = model.r;
+					if (!_v6.$) {
+						var q = _v6.a;
+						return _Utils_Tuple2(
+							A2($author$project$Explo$removeQuest, model.w, q),
+							$author$project$Explo$getMonsterStats(q));
 					} else {
-						return model.v;
+						return _Utils_Tuple2(
+							model.w,
+							A4($author$project$Battle$FightingStats, 200, 200, 20, 0));
 					}
 				}();
+				var new_quests = _v5.a;
+				var monster_stats = _v5.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							j: A2($author$project$Battle$PlayerTurn, model.N, $author$project$Game$monster_stats),
-							m: $author$project$Explo$NoExplo,
-							v: new_quests
+							g: A2($author$project$Battle$PlayerTurn, model.N, monster_stats),
+							n: $author$project$Explo$NoExplo,
+							w: new_quests
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
@@ -5559,9 +5600,9 @@ var $author$project$Game$update = F2(
 					_Utils_update(
 						model,
 						{
-							j: $author$project$Battle$NoBattle,
-							r: 0,
-							m: A2($author$project$Explo$ExploInProgress, $author$project$Explo$zone1, 0)
+							g: $author$project$Battle$NoBattle,
+							s: 0,
+							n: A2($author$project$Explo$ExploInProgress, $author$project$Explo$zone1, 0)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
@@ -5570,16 +5611,28 @@ var $author$project$Game$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{r: 0, m: $author$project$Explo$NoExplo}),
+						{s: 0, n: $author$project$Explo$NoExplo}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 7:
 				var q = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							G: $elm$core$Maybe$Just(q)
+							r: $elm$core$Maybe$Just(q)
 						}),
+					$elm$core$Platform$Cmd$none);
+			case 5:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{r: $elm$core$Maybe$Nothing}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{r: $elm$core$Maybe$Nothing}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -5596,8 +5649,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Game$StartBattle = {$: 4};
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Explo$monsterTypeToString = function (m) {
 	if (!m) {
 		return 'Wolf';
@@ -5605,6 +5656,10 @@ var $author$project$Explo$monsterTypeToString = function (m) {
 		return 'Boar';
 	}
 };
+var $author$project$Game$EndQuestNoRewards = {$: 6};
+var $author$project$Game$EndQuestWithRewards = {$: 5};
+var $author$project$Game$StartBattle = {$: 4};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -5621,6 +5676,45 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		$elm$html$Html$Events$on,
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Game$viewBattleButtons = function (battle_state) {
+	switch (battle_state.$) {
+		case 0:
+			return A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Game$StartBattle)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Fight!')
+					]));
+		case 3:
+			return A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Game$EndQuestWithRewards)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('End quest and get rewards')
+					]));
+		case 4:
+			return A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Game$EndQuestNoRewards)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('End quest (no rewards)')
+					]));
+		default:
+			return $elm$html$Html$text('');
+	}
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$span = _VirtualDom_node('span');
@@ -5644,7 +5738,7 @@ var $author$project$Game$viewMonsterLife = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(m.s) + ('/' + $elm$core$String$fromInt(m.ae)))
+							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.ae)))
 						]))
 				]));
 	});
@@ -5696,13 +5790,21 @@ var $author$project$Game$viewPlayerStats = F2(
 				case 1:
 					var p = battle_state.a;
 					var m = battle_state.b;
-					return p.s;
+					return p.t;
 				case 2:
 					var p = battle_state.a;
 					var m = battle_state.b;
-					return p.s;
+					return p.t;
+				case 3:
+					var p = battle_state.a;
+					var m = battle_state.b;
+					return p.t;
+				case 4:
+					var p = battle_state.a;
+					var m = battle_state.b;
+					return p.t;
 				default:
-					return player.s;
+					return player.t;
 			}
 		}();
 		return A2(
@@ -5729,7 +5831,7 @@ var $author$project$Game$viewPlayerStats = F2(
 				]));
 	});
 var $author$project$Game$viewBattle = function (model) {
-	var _v0 = model.G;
+	var _v0 = model.r;
 	if (_v0.$ === 1) {
 		return A2($elm$html$Html$div, _List_Nil, _List_Nil);
 	} else {
@@ -5739,21 +5841,12 @@ var $author$project$Game$viewBattle = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					A2($author$project$Game$viewPlayerStats, model.N, model.j),
+					A2($author$project$Game$viewPlayerStats, model.N, model.g),
 					A2(
 					$author$project$Game$viewMonsterStats,
-					model.j,
-					$author$project$Explo$monsterTypeToString(quest.o)),
-					A2(
-					$elm$html$Html$button,
-					_List_fromArray(
-						[
-							$elm$html$Html$Events$onClick($author$project$Game$StartBattle)
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Fight!')
-						]))
+					model.g,
+					$author$project$Explo$monsterTypeToString(quest.k)),
+					$author$project$Game$viewBattleButtons(model.g)
 				]));
 	}
 };
@@ -5765,7 +5858,7 @@ var $author$project$Game$viewDebug = function (model) {
 		_List_fromArray(
 			[
 				function () {
-				var _v0 = model.j;
+				var _v0 = model.g;
 				switch (_v0.$) {
 					case 0:
 						return A2(
@@ -5784,7 +5877,7 @@ var $author$project$Game$viewDebug = function (model) {
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									'Player turn: current player HP = ' + ($elm$core$String$fromInt(p.s) + (', current monster HP = ' + $elm$core$String$fromInt(m.s))))
+									'Player turn: current player HP = ' + ($elm$core$String$fromInt(p.t) + (', current monster HP = ' + $elm$core$String$fromInt(m.t))))
 								]));
 					case 2:
 						var p = _v0.a;
@@ -5795,7 +5888,7 @@ var $author$project$Game$viewDebug = function (model) {
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									'Monster turn: current player HP = ' + ($elm$core$String$fromInt(p.s) + (', current monster HP = ' + $elm$core$String$fromInt(m.s))))
+									'Monster turn: current player HP = ' + ($elm$core$String$fromInt(p.t) + (', current monster HP = ' + $elm$core$String$fromInt(m.t))))
 								]));
 					case 3:
 						return A2(
@@ -5816,9 +5909,9 @@ var $author$project$Game$viewDebug = function (model) {
 				}
 			}(),
 				$elm$html$Html$text(
-				'battle acc: ' + $elm$core$String$fromFloat(model.B)),
+				'battle acc: ' + $elm$core$String$fromFloat(model.C)),
 				$elm$html$Html$text(
-				', Explo acc: ' + $elm$core$String$fromFloat(model.r))
+				', Explo acc: ' + $elm$core$String$fromFloat(model.s))
 			]));
 };
 var $author$project$Game$CancelExplo = {$: 3};
@@ -5914,7 +6007,7 @@ var $author$project$Game$viewExploration = function (explo) {
 	}
 };
 var $author$project$Game$SelectQuest = function (a) {
-	return {$: 5, a: a};
+	return {$: 7, a: a};
 };
 var $author$project$Game$viewQuest = function (q) {
 	return A2(
@@ -5933,7 +6026,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Monster: ' + $author$project$Explo$monsterTypeToString(q.o))
+						'Monster: ' + $author$project$Explo$monsterTypeToString(q.k))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -5957,7 +6050,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Remaining: ' + $elm$core$String$fromInt(q.I))
+						'Remaining: ' + $elm$core$String$fromInt(q.E))
 					]))
 			]));
 };
@@ -5991,7 +6084,7 @@ var $author$project$Game$view = function (model) {
 							[
 								$elm$html$Html$text('Quests')
 							])),
-						$author$project$Game$viewQuests(model.v)
+						$author$project$Game$viewQuests(model.w)
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -6008,7 +6101,7 @@ var $author$project$Game$view = function (model) {
 							[
 								$elm$html$Html$text('Exploration')
 							])),
-						$author$project$Game$viewExploration(model.m)
+						$author$project$Game$viewExploration(model.n)
 					])),
 				A2(
 				$elm$html$Html$div,
