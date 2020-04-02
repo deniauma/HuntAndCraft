@@ -5,6 +5,7 @@ import Browser.Events exposing (onAnimationFrameDelta)
 import Html exposing (Html, button, div, text, h2, h3, span, p, br)
 import Html.Attributes exposing (id, class, style, disabled)
 import Html.Events exposing (onClick)
+import Random
 import Explo exposing (..)
 import Battle exposing (..)
 
@@ -41,6 +42,7 @@ type Msg
     | StartBattle
     | EndQuestWithRewards
     | EndQuestNoRewards
+    | AddNewQuest Quest
     | SelectQuest Quest
 
 
@@ -61,9 +63,7 @@ update msg model =
                         (new_explo, new_explo_acc) = updateExplo model.exploration (model.explo_accumulator + delta)
                     in
                         case new_explo of
-                            ExploComplete z q -> ({ model | exploration = ExploInProgress z 0
-                                , explo_accumulator = new_explo_acc
-                                , quests = addQuest model.quests q }, Cmd.none)
+                            ExploComplete z -> (model, Random.generate AddNewQuest (createQuestFromZone z))
                             _ -> ({ model | exploration = new_explo
                                 , explo_accumulator = new_explo_acc }, Cmd.none)
                 Battling -> 
@@ -84,7 +84,7 @@ update msg model =
                 , exploration = NoExplo
                 , quests = new_quests
                 , player_action = Battling }, Cmd.none)
-        StartExplo -> ( { model | exploration = ExploInProgress zone1 0
+        StartExplo -> ( { model | exploration = ExploInProgress (getZonefromBiome Forest) 0
             , explo_accumulator = 0
             , battle = NoBattle
             , player_action = Exploring }, Cmd.none )
@@ -92,6 +92,9 @@ update msg model =
         SelectQuest q -> ( { model | current_quest = Just q }, Cmd.none)
         EndQuestWithRewards -> ( { model | current_quest = Nothing, player_action = Idle, battle = NoBattle }, Cmd.none )
         EndQuestNoRewards -> ( { model | current_quest = Nothing, player_action = Idle, battle = NoBattle }, Cmd.none )
+        AddNewQuest q -> ({ model | exploration = ExploInProgress (getZonefromBiome q.biome) 0
+                                , explo_accumulator = 0
+                                , quests = addQuest model.quests q }, Cmd.none)
 
 
 
@@ -116,7 +119,7 @@ viewExploration explo player_action =
                 , button [onClick CancelExplo] [ text "Cancel" ] ] 
                 ]
         NoExplo -> div [] [ text "No exploration in progress.", br [] [], button [ onClick StartExplo, disabled (player_action /= Idle) ] [ text "Start exploring" ] ]
-        ExploComplete zone q -> div [] [ text ("Exploration of " ++ zone.name ++ " is complete.") ]
+        ExploComplete zone -> div [] [ text ("Exploration of " ++ zone.name ++ " is complete.") ]
 
 
 viewQuest : Quest -> Html Msg

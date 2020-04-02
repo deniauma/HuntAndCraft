@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.U.J === region.Z.J)
+	if (region.V.K === region._.K)
 	{
-		return 'on line ' + region.U.J;
+		return 'on line ' + region.V.K;
 	}
-	return 'on lines ' + region.U.J + ' through ' + region.Z.J;
+	return 'on lines ' + region.V.K + ' through ' + region._.K;
 }
 
 
@@ -1857,7 +1857,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aK,
+		impl.aL,
 		impl.aT,
 		impl.aR,
 		function() { return function() {} }
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		u: func(record.u),
-		V: record.V,
-		S: record.S
+		W: record.W,
+		T: record.T
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.u;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.V;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.W;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.S) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.T) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,7 +3928,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aK,
+		impl.aL,
 		impl.aT,
 		impl.aR,
 		function(sendToApp, initialModel) {
@@ -3964,11 +3964,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aK,
+		impl.aL,
 		impl.aT,
 		impl.aR,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.T && impl.T(sendToApp)
+			var divertHrefToApp = impl.U && impl.U(sendToApp)
 			var view = impl.aU;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -3977,7 +3977,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aA);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aB);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4043,7 +4043,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		T: function(sendToApp)
+		U: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.an === next.an
-							&& curr.ad === next.ad
-							&& curr.ak.a === next.ak.a
+							&& curr.ao === next.ao
+							&& curr.ae === next.ae
+							&& curr.al.a === next.al.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,9 +4069,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aK: function(flags)
+		aL: function(flags)
 		{
-			return A3(impl.aK, flags, _Browser_getUrl(), key);
+			return A3(impl.aL, flags, _Browser_getUrl(), key);
 		},
 		aU: impl.aU,
 		aT: impl.aT,
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aI: 'hidden', aB: 'visibilitychange' }
+		? { aJ: 'hidden', aC: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aI: 'mozHidden', aB: 'mozvisibilitychange' }
+		? { aJ: 'mozHidden', aC: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aI: 'msHidden', aB: 'msvisibilitychange' }
+		? { aJ: 'msHidden', aC: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aI: 'webkitHidden', aB: 'webkitvisibilitychange' }
-		: { aI: 'hidden', aB: 'visibilitychange' };
+		? { aJ: 'webkitHidden', aC: 'webkitvisibilitychange' }
+		: { aJ: 'hidden', aC: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ar: _Browser_getScene(),
-		au: {
-			aw: _Browser_window.pageXOffset,
-			ax: _Browser_window.pageYOffset,
-			av: _Browser_doc.documentElement.clientWidth,
-			ac: _Browser_doc.documentElement.clientHeight
+		as: _Browser_getScene(),
+		av: {
+			ax: _Browser_window.pageXOffset,
+			ay: _Browser_window.pageYOffset,
+			aw: _Browser_doc.documentElement.clientWidth,
+			ad: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		av: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ac: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aw: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ad: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ar: {
-				av: node.scrollWidth,
-				ac: node.scrollHeight
+			as: {
+				aw: node.scrollWidth,
+				ad: node.scrollHeight
 			},
-			au: {
-				aw: node.scrollLeft,
-				ax: node.scrollTop,
-				av: node.clientWidth,
-				ac: node.clientHeight
+			av: {
+				ax: node.scrollLeft,
+				ay: node.scrollTop,
+				aw: node.clientWidth,
+				ad: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ar: _Browser_getScene(),
-			au: {
-				aw: x,
-				ax: y,
-				av: _Browser_doc.documentElement.clientWidth,
-				ac: _Browser_doc.documentElement.clientHeight
+			as: _Browser_getScene(),
+			av: {
+				ax: x,
+				ay: y,
+				aw: _Browser_doc.documentElement.clientWidth,
+				ad: _Browser_doc.documentElement.clientHeight
 			},
-			aE: {
-				aw: x + rect.left,
-				ax: y + rect.top,
-				av: rect.width,
-				ac: rect.height
+			aF: {
+				ax: x + rect.left,
+				ay: y + rect.top,
+				aw: rect.width,
+				ad: rect.height
 			}
 		};
 	});
@@ -4354,6 +4354,89 @@ function _Browser_load(url)
 			_VirtualDom_doc.location.reload(false);
 		}
 	}));
+}
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
+function _Time_now(millisToPosix)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(millisToPosix(Date.now())));
+	});
+}
+
+var _Time_setInterval = F2(function(interval, task)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
+		return function() { clearInterval(id); };
+	});
+});
+
+function _Time_here()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(
+			A2($elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
+		));
+	});
+}
+
+
+function _Time_getZoneName()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			var name = $elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
+		}
+		catch (e)
+		{
+			var name = $elm$time$Time$Offset(new Date().getTimezoneOffset());
+		}
+		callback(_Scheduler_succeed(name));
+	});
 }
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
@@ -4859,7 +4942,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ab: fragment, ad: host, ai: path, ak: port_, an: protocol, ao: query};
+		return {ac: fragment, ae: host, aj: path, al: port_, ao: protocol, ap: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5140,17 +5223,18 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Battle$FightingStats = F4(
 	function (hp, max_hp, atk, def) {
-		return {P: atk, aC: def, t: hp, af: max_hp};
+		return {Q: atk, aD: def, t: hp, ag: max_hp};
 	});
 var $author$project$Game$Idle = 2;
 var $author$project$Battle$NoBattle = {$: 0};
 var $author$project$Explo$NoExplo = {$: 0};
-var $author$project$Explo$Quest = F4(
-	function (monster_type, remaining, exp, gold) {
-		return {aF: exp, aH: gold, k: monster_type, E: remaining};
+var $author$project$Explo$Forest = 0;
+var $author$project$Explo$Quest = F5(
+	function (monster_type, biome, remaining, exp, gold) {
+		return {J: biome, aG: exp, aI: gold, k: monster_type, E: remaining};
 	});
 var $author$project$Explo$Wolf = 0;
-var $author$project$Explo$createWolfQuest = A4($author$project$Explo$Quest, 0, 1, 10, 50);
+var $author$project$Explo$createWolfQuest = A5($author$project$Explo$Quest, 0, 0, 1, 10, 50);
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Game$init = function (_v0) {
@@ -5162,7 +5246,7 @@ var $author$project$Game$init = function (_v0) {
 			s: 0,
 			o: $author$project$Explo$NoExplo,
 			n: 2,
-			O: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
+			P: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
 			w: _List_fromArray(
 				[$author$project$Explo$createWolfQuest])
 		},
@@ -5176,7 +5260,7 @@ var $elm$browser$Browser$AnimationManager$Delta = function (a) {
 };
 var $elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {R: oldTime, aq: request, as: subs};
+		return {S: oldTime, ar: request, at: subs};
 	});
 var $elm$browser$Browser$AnimationManager$init = $elm$core$Task$succeed(
 	A3($elm$browser$Browser$AnimationManager$State, _List_Nil, $elm$core$Maybe$Nothing, 0));
@@ -5187,8 +5271,8 @@ var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$core$Process$spawn = _Scheduler_spawn;
 var $elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _v0) {
-		var request = _v0.aq;
-		var oldTime = _v0.R;
+		var request = _v0.ar;
+		var oldTime = _v0.S;
 		var _v1 = _Utils_Tuple2(request, subs);
 		if (_v1.a.$ === 1) {
 			if (!_v1.b.b) {
@@ -5236,8 +5320,8 @@ var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _v0) {
-		var subs = _v0.as;
-		var oldTime = _v0.R;
+		var subs = _v0.at;
+		var oldTime = _v0.S;
 		var send = function (sub) {
 			if (!sub.$) {
 				var tagger = sub.a;
@@ -5306,6 +5390,9 @@ var $elm$browser$Browser$Events$onAnimationFrameDelta = $elm$browser$Browser$Ani
 var $author$project$Game$subscriptions = function (_v0) {
 	return $elm$browser$Browser$Events$onAnimationFrameDelta($author$project$Game$Frame);
 };
+var $author$project$Game$AddNewQuest = function (a) {
+	return {$: 6, a: a};
+};
 var $author$project$Game$Battling = 1;
 var $author$project$Explo$ExploInProgress = F2(
 	function (a, b) {
@@ -5360,12 +5447,229 @@ var $author$project$Explo$addQuest = F2(
 			_List_fromArray(
 				[q]));
 	});
+var $author$project$Explo$Boar = 1;
+var $author$project$Explo$BrownBear = 2;
+var $elm$random$Random$Generator = $elm$core$Basics$identity;
+var $elm$random$Random$map = F2(
+	function (func, _v0) {
+		var genA = _v0;
+		return function (seed0) {
+			var _v1 = genA(seed0);
+			var a = _v1.a;
+			var seed1 = _v1.b;
+			return _Utils_Tuple2(
+				func(a),
+				seed1);
+		};
+	});
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$random$Random$next = function (_v0) {
+	var state0 = _v0.a;
+	var incr = _v0.b;
+	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $elm$random$Random$peel = function (_v0) {
+	var state = _v0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var $elm$random$Random$float = F2(
+	function (a, b) {
+		return function (seed0) {
+			var seed1 = $elm$random$Random$next(seed0);
+			var range = $elm$core$Basics$abs(b - a);
+			var n1 = $elm$random$Random$peel(seed1);
+			var n0 = $elm$random$Random$peel(seed0);
+			var lo = (134217727 & n1) * 1.0;
+			var hi = (67108863 & n0) * 1.0;
+			var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
+			var scaled = (val * range) + a;
+			return _Utils_Tuple2(
+				scaled,
+				$elm$random$Random$next(seed1));
+		};
+	});
+var $elm$random$Random$getByWeight = F3(
+	function (_v0, others, countdown) {
+		getByWeight:
+		while (true) {
+			var weight = _v0.a;
+			var value = _v0.b;
+			if (!others.b) {
+				return value;
+			} else {
+				var second = others.a;
+				var otherOthers = others.b;
+				if (_Utils_cmp(
+					countdown,
+					$elm$core$Basics$abs(weight)) < 1) {
+					return value;
+				} else {
+					var $temp$_v0 = second,
+						$temp$others = otherOthers,
+						$temp$countdown = countdown - $elm$core$Basics$abs(weight);
+					_v0 = $temp$_v0;
+					others = $temp$others;
+					countdown = $temp$countdown;
+					continue getByWeight;
+				}
+			}
+		}
+	});
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $elm$random$Random$weighted = F2(
+	function (first, others) {
+		var normalize = function (_v0) {
+			var weight = _v0.a;
+			return $elm$core$Basics$abs(weight);
+		};
+		var total = normalize(first) + $elm$core$List$sum(
+			A2($elm$core$List$map, normalize, others));
+		return A2(
+			$elm$random$Random$map,
+			A2($elm$random$Random$getByWeight, first, others),
+			A2($elm$random$Random$float, 0, total));
+	});
+var $author$project$Explo$createQuestFromZone = function (zone) {
+	var _v0 = zone.J;
+	if (!_v0) {
+		return A2(
+			$elm$random$Random$map,
+			function (x) {
+				return A5($author$project$Explo$Quest, x, zone.J, 1, 10, 50);
+			},
+			A2(
+				$elm$random$Random$weighted,
+				_Utils_Tuple2(50, 1),
+				_List_fromArray(
+					[
+						_Utils_Tuple2(30, 0),
+						_Utils_Tuple2(20, 2)
+					])));
+	} else {
+		return A2(
+			$elm$random$Random$map,
+			function (x) {
+				return A5($author$project$Explo$Quest, x, zone.J, 1, 10, 50);
+			},
+			A2(
+				$elm$random$Random$weighted,
+				_Utils_Tuple2(50, 1),
+				_List_fromArray(
+					[
+						_Utils_Tuple2(30, 0),
+						_Utils_Tuple2(20, 2)
+					])));
+	}
+};
+var $elm$random$Random$Generate = $elm$core$Basics$identity;
+var $elm$random$Random$initialSeed = function (x) {
+	var _v0 = $elm$random$Random$next(
+		A2($elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _v0.a;
+	var incr = _v0.b;
+	var state2 = (state1 + x) >>> 0;
+	return $elm$random$Random$next(
+		A2($elm$random$Random$Seed, state2, incr));
+};
+var $elm$time$Time$Name = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$time$Time$Offset = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$time$Time$customZone = $elm$time$Time$Zone;
+var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
+var $elm$time$Time$posixToMillis = function (_v0) {
+	var millis = _v0;
+	return millis;
+};
+var $elm$random$Random$init = A2(
+	$elm$core$Task$andThen,
+	function (time) {
+		return $elm$core$Task$succeed(
+			$elm$random$Random$initialSeed(
+				$elm$time$Time$posixToMillis(time)));
+	},
+	$elm$time$Time$now);
+var $elm$random$Random$step = F2(
+	function (_v0, seed) {
+		var generator = _v0;
+		return generator(seed);
+	});
+var $elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return $elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a;
+			var rest = commands.b;
+			var _v1 = A2($elm$random$Random$step, generator, seed);
+			var value = _v1.a;
+			var newSeed = _v1.b;
+			return A2(
+				$elm$core$Task$andThen,
+				function (_v2) {
+					return A3($elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2($elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var $elm$random$Random$onSelfMsg = F3(
+	function (_v0, _v1, seed) {
+		return $elm$core$Task$succeed(seed);
+	});
+var $elm$random$Random$cmdMap = F2(
+	function (func, _v0) {
+		var generator = _v0;
+		return A2($elm$random$Random$map, func, generator);
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
+var $elm$random$Random$command = _Platform_leaf('Random');
+var $elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return $elm$random$Random$command(
+			A2($elm$random$Random$map, tagger, generator));
+	});
 var $author$project$Explo$getMonsterStats = function (q) {
 	var _v0 = q.k;
-	if (!_v0) {
-		return A4($author$project$Battle$FightingStats, 200, 200, 20, 0);
+	switch (_v0) {
+		case 0:
+			return A4($author$project$Battle$FightingStats, 200, 200, 20, 0);
+		case 1:
+			return A4($author$project$Battle$FightingStats, 100, 100, 5, 0);
+		default:
+			return A4($author$project$Battle$FightingStats, 500, 500, 50, 0);
+	}
+};
+var $author$project$Explo$Mountains = 1;
+var $author$project$Explo$Zone = F3(
+	function (name, biome, explo_rate) {
+		return {J: biome, ab: explo_rate, aM: name};
+	});
+var $author$project$Explo$getZonefromBiome = function (biome) {
+	if (!biome) {
+		return A3($author$project$Explo$Zone, 'Forest', 0, 1);
 	} else {
-		return A4($author$project$Battle$FightingStats, 100, 100, 5, 0);
+		return A3($author$project$Explo$Zone, 'Mountains', 1, 0.5);
 	}
 };
 var $author$project$Explo$decrementQuest = F2(
@@ -5423,7 +5727,7 @@ var $author$project$Battle$updateFighterHP = F2(
 		return _Utils_update(
 			defender,
 			{
-				t: A2($elm$core$Basics$max, defender.t - attacker.P, 0)
+				t: A2($elm$core$Basics$max, defender.t - attacker.Q, 0)
 			});
 	});
 var $author$project$Battle$updateBattle = F2(
@@ -5440,7 +5744,7 @@ var $author$project$Battle$updateBattle = F2(
 						var new_monster = _Utils_update(
 							monster,
 							{
-								t: A2($elm$core$Basics$max, monster.t - player.P, 0)
+								t: A2($elm$core$Basics$max, monster.t - player.Q, 0)
 							});
 						if (!new_monster.t) {
 							var $temp$battle = A2($author$project$Battle$Win, player, new_monster),
@@ -5484,10 +5788,9 @@ var $author$project$Battle$updateBattle = F2(
 			}
 		}
 	});
-var $author$project$Explo$ExploComplete = F2(
-	function (a, b) {
-		return {$: 2, a: a, b: b};
-	});
+var $author$project$Explo$ExploComplete = function (a) {
+	return {$: 2, a: a};
+};
 var $author$project$Explo$exploTick = 10;
 var $elm$core$Basics$min = F2(
 	function (x, y) {
@@ -5504,10 +5807,10 @@ var $author$project$Explo$updateExplo = F2(
 					var zone = explo.a;
 					var progress = explo.b;
 					if (_Utils_cmp(acc, $author$project$Explo$exploTick) > -1) {
-						var new_progress = A2($elm$core$Basics$min, progress + zone.aa, 100);
+						var new_progress = A2($elm$core$Basics$min, progress + zone.ab, 100);
 						if (new_progress === 100) {
 							return _Utils_Tuple2(
-								A2($author$project$Explo$ExploComplete, zone, $author$project$Explo$createWolfQuest),
+								$author$project$Explo$ExploComplete(zone),
 								0);
 						} else {
 							var $temp$explo = A2($author$project$Explo$ExploInProgress, zone, new_progress),
@@ -5521,22 +5824,10 @@ var $author$project$Explo$updateExplo = F2(
 					}
 				default:
 					var zone = explo.a;
-					var q = explo.b;
 					return _Utils_Tuple2(explo, 0);
 			}
 		}
 	});
-var $author$project$Explo$Boar = 1;
-var $author$project$Explo$Zone = F3(
-	function (name, explo_rate, monster_types) {
-		return {aa: explo_rate, aL: monster_types, aM: name};
-	});
-var $author$project$Explo$zone1 = A3(
-	$author$project$Explo$Zone,
-	'Forest',
-	1,
-	_List_fromArray(
-		[1, 0]));
 var $author$project$Game$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5550,16 +5841,12 @@ var $author$project$Game$update = F2(
 						var new_explo_acc = _v2.b;
 						if (new_explo.$ === 2) {
 							var z = new_explo.a;
-							var q = new_explo.b;
 							return _Utils_Tuple2(
-								_Utils_update(
-									model,
-									{
-										s: new_explo_acc,
-										o: A2($author$project$Explo$ExploInProgress, z, 0),
-										w: A2($author$project$Explo$addQuest, model.w, q)
-									}),
-								$elm$core$Platform$Cmd$none);
+								model,
+								A2(
+									$elm$random$Random$generate,
+									$author$project$Game$AddNewQuest,
+									$author$project$Explo$createQuestFromZone(z)));
 						} else {
 							return _Utils_Tuple2(
 								_Utils_update(
@@ -5599,7 +5886,7 @@ var $author$project$Game$update = F2(
 					_Utils_update(
 						model,
 						{
-							g: A2($author$project$Battle$PlayerTurn, model.O, monster_stats),
+							g: A2($author$project$Battle$PlayerTurn, model.P, monster_stats),
 							o: $author$project$Explo$NoExplo,
 							n: 1,
 							w: new_quests
@@ -5612,7 +5899,10 @@ var $author$project$Game$update = F2(
 						{
 							g: $author$project$Battle$NoBattle,
 							s: 0,
-							o: A2($author$project$Explo$ExploInProgress, $author$project$Explo$zone1, 0),
+							o: A2(
+								$author$project$Explo$ExploInProgress,
+								$author$project$Explo$getZonefromBiome(0),
+								0),
 							n: 0
 						}),
 					$elm$core$Platform$Cmd$none);
@@ -5622,7 +5912,7 @@ var $author$project$Game$update = F2(
 						model,
 						{s: 0, o: $author$project$Explo$NoExplo, n: 2}),
 					$elm$core$Platform$Cmd$none);
-			case 6:
+			case 7:
 				var q = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -5637,11 +5927,25 @@ var $author$project$Game$update = F2(
 						model,
 						{g: $author$project$Battle$NoBattle, y: $elm$core$Maybe$Nothing, n: 2}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 5:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{g: $author$project$Battle$NoBattle, y: $elm$core$Maybe$Nothing, n: 2}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var q = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							s: 0,
+							o: A2(
+								$author$project$Explo$ExploInProgress,
+								$author$project$Explo$getZonefromBiome(q.J),
+								0),
+							w: A2($author$project$Explo$addQuest, model.w, q)
+						}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -5659,10 +5963,13 @@ var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id'
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Explo$monsterTypeToString = function (m) {
-	if (!m) {
-		return 'Wolf';
-	} else {
-		return 'Boar';
+	switch (m) {
+		case 0:
+			return 'Wolf';
+		case 1:
+			return 'Boar';
+		default:
+			return 'Brown bear';
 	}
 };
 var $author$project$Game$EndQuestNoRewards = {$: 5};
@@ -5759,7 +6066,7 @@ var $author$project$Game$viewMonsterLife = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.af)))
+							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.ag)))
 						]))
 				]));
 	});
@@ -5847,7 +6154,7 @@ var $author$project$Game$viewPlayerStats = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.af)))
+							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.ag)))
 						]))
 				]));
 	});
@@ -5863,7 +6170,7 @@ var $author$project$Game$viewBattle = F2(
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2($author$project$Game$viewPlayerStats, model.O, model.g),
+						A2($author$project$Game$viewPlayerStats, model.P, model.g),
 						A2(
 						$author$project$Game$viewMonsterStats,
 						model.g,
@@ -6020,7 +6327,6 @@ var $author$project$Game$viewExploration = F2(
 						]));
 			default:
 				var zone = explo.a;
-				var q = explo.b;
 				return A2(
 					$elm$html$Html$div,
 					_List_Nil,
@@ -6031,7 +6337,7 @@ var $author$project$Game$viewExploration = F2(
 		}
 	});
 var $author$project$Game$SelectQuest = function (a) {
-	return {$: 6, a: a};
+	return {$: 7, a: a};
 };
 var $author$project$Game$viewQuest = function (q) {
 	return A2(
@@ -6058,7 +6364,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Experience: ' + $elm$core$String$fromInt(q.aF))
+						'Experience: ' + $elm$core$String$fromInt(q.aG))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6066,7 +6372,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Gold: ' + $elm$core$String$fromInt(q.aH))
+						'Gold: ' + $elm$core$String$fromInt(q.aI))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6157,6 +6463,6 @@ var $author$project$Game$view = function (model) {
 			]));
 };
 var $author$project$Game$main = $elm$browser$Browser$element(
-	{aK: $author$project$Game$init, aR: $author$project$Game$subscriptions, aT: $author$project$Game$update, aU: $author$project$Game$view});
+	{aL: $author$project$Game$init, aR: $author$project$Game$subscriptions, aT: $author$project$Game$update, aU: $author$project$Game$view});
 _Platform_export({'Game':{'init':$author$project$Game$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
