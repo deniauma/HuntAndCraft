@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aJ,
-		impl.aS,
-		impl.aQ,
+		impl.aK,
+		impl.aT,
+		impl.aR,
 		function() { return function() {} }
 	);
 });
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aJ,
-		impl.aS,
-		impl.aQ,
+		impl.aK,
+		impl.aT,
+		impl.aR,
 		function(sendToApp, initialModel) {
-			var view = impl.aT;
+			var view = impl.aU;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aJ,
-		impl.aS,
-		impl.aQ,
+		impl.aK,
+		impl.aT,
+		impl.aR,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.S && impl.S(sendToApp)
-			var view = impl.aT;
+			var view = impl.aU;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.az);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aA);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aR) && (_VirtualDom_doc.title = title = doc.aR);
+				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
 			});
 		}
 	);
@@ -4038,8 +4038,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aM;
-	var onUrlRequest = impl.aN;
+	var onUrlChange = impl.aN;
+	var onUrlRequest = impl.aO;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.am === next.am
+							&& curr.an === next.an
 							&& curr.ac === next.ac
-							&& curr.aj.a === next.aj.a
+							&& curr.ak.a === next.ak.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aJ: function(flags)
+		aK: function(flags)
 		{
-			return A3(impl.aJ, flags, _Browser_getUrl(), key);
+			return A3(impl.aK, flags, _Browser_getUrl(), key);
 		},
+		aU: impl.aU,
 		aT: impl.aT,
-		aS: impl.aS,
-		aQ: impl.aQ
+		aR: impl.aR
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aH: 'hidden', aA: 'visibilitychange' }
+		? { aI: 'hidden', aB: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aH: 'mozHidden', aA: 'mozvisibilitychange' }
+		? { aI: 'mozHidden', aB: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aH: 'msHidden', aA: 'msvisibilitychange' }
+		? { aI: 'msHidden', aB: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aH: 'webkitHidden', aA: 'webkitvisibilitychange' }
-		: { aH: 'hidden', aA: 'visibilitychange' };
+		? { aI: 'webkitHidden', aB: 'webkitvisibilitychange' }
+		: { aI: 'hidden', aB: 'visibilitychange' };
 }
 
 
@@ -4232,11 +4232,11 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aq: _Browser_getScene(),
-		at: {
-			av: _Browser_window.pageXOffset,
-			aw: _Browser_window.pageYOffset,
-			au: _Browser_doc.documentElement.clientWidth,
+		ar: _Browser_getScene(),
+		au: {
+			aw: _Browser_window.pageXOffset,
+			ax: _Browser_window.pageYOffset,
+			av: _Browser_doc.documentElement.clientWidth,
 			ab: _Browser_doc.documentElement.clientHeight
 		}
 	};
@@ -4247,7 +4247,7 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		au: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		av: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
 		ab: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
@@ -4271,14 +4271,14 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aq: {
-				au: node.scrollWidth,
+			ar: {
+				av: node.scrollWidth,
 				ab: node.scrollHeight
 			},
-			at: {
-				av: node.scrollLeft,
-				aw: node.scrollTop,
-				au: node.clientWidth,
+			au: {
+				aw: node.scrollLeft,
+				ax: node.scrollTop,
+				av: node.clientWidth,
 				ab: node.clientHeight
 			}
 		};
@@ -4309,17 +4309,17 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aq: _Browser_getScene(),
-			at: {
-				av: x,
-				aw: y,
-				au: _Browser_doc.documentElement.clientWidth,
+			ar: _Browser_getScene(),
+			au: {
+				aw: x,
+				ax: y,
+				av: _Browser_doc.documentElement.clientWidth,
 				ab: _Browser_doc.documentElement.clientHeight
 			},
-			aD: {
-				av: x + rect.left,
-				aw: y + rect.top,
-				au: rect.width,
+			aE: {
+				aw: x + rect.left,
+				ax: y + rect.top,
+				av: rect.width,
 				ab: rect.height
 			}
 		};
@@ -4859,7 +4859,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aa: fragment, ac: host, ah: path, aj: port_, am: protocol, an: query};
+		return {aa: fragment, ac: host, ah: path, ak: port_, an: protocol, ao: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5140,13 +5140,14 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Battle$FightingStats = F4(
 	function (hp, max_hp, atk, def) {
-		return {O: atk, aB: def, t: hp, ae: max_hp};
+		return {O: atk, aC: def, t: hp, ae: max_hp};
 	});
+var $author$project$Game$Idle = 2;
 var $author$project$Battle$NoBattle = {$: 0};
 var $author$project$Explo$NoExplo = {$: 0};
 var $author$project$Explo$Quest = F4(
 	function (monster_type, remaining, exp, gold) {
-		return {aE: exp, aG: gold, k: monster_type, E: remaining};
+		return {aF: exp, aH: gold, k: monster_type, E: remaining};
 	});
 var $author$project$Explo$Wolf = 0;
 var $author$project$Explo$createWolfQuest = A4($author$project$Explo$Quest, 0, 1, 10, 50);
@@ -5160,6 +5161,7 @@ var $author$project$Game$init = function (_v0) {
 			r: $elm$core$Maybe$Nothing,
 			s: 0,
 			n: $author$project$Explo$NoExplo,
+			aj: 2,
 			N: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
 			w: _List_fromArray(
 				[$author$project$Explo$createWolfQuest])
@@ -5174,7 +5176,7 @@ var $elm$browser$Browser$AnimationManager$Delta = function (a) {
 };
 var $elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {Q: oldTime, ap: request, ar: subs};
+		return {Q: oldTime, aq: request, as: subs};
 	});
 var $elm$browser$Browser$AnimationManager$init = $elm$core$Task$succeed(
 	A3($elm$browser$Browser$AnimationManager$State, _List_Nil, $elm$core$Maybe$Nothing, 0));
@@ -5185,7 +5187,7 @@ var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$core$Process$spawn = _Scheduler_spawn;
 var $elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _v0) {
-		var request = _v0.ap;
+		var request = _v0.aq;
 		var oldTime = _v0.Q;
 		var _v1 = _Utils_Tuple2(request, subs);
 		if (_v1.a.$ === 1) {
@@ -5234,7 +5236,7 @@ var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _v0) {
-		var subs = _v0.ar;
+		var subs = _v0.as;
 		var oldTime = _v0.Q;
 		var send = function (sub) {
 			if (!sub.$) {
@@ -5522,11 +5524,17 @@ var $author$project$Explo$updateExplo = F2(
 			}
 		}
 	});
+var $author$project$Explo$Boar = 1;
 var $author$project$Explo$Zone = F3(
 	function (name, explo_rate, monster_types) {
-		return {_: explo_rate, aK: monster_types, aL: name};
+		return {_: explo_rate, aL: monster_types, aM: name};
 	});
-var $author$project$Explo$zone1 = A3($author$project$Explo$Zone, 'Forest', 1, 5);
+var $author$project$Explo$zone1 = A3(
+	$author$project$Explo$Zone,
+	'Forest',
+	1,
+	_List_fromArray(
+		[1, 0]));
 var $author$project$Game$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5570,7 +5578,7 @@ var $author$project$Game$update = F2(
 							{C: new_battle_acc, g: new_battle, s: new_explo_acc, n: new_explo}),
 						$elm$core$Platform$Cmd$none);
 				}
-			case 4:
+			case 3:
 				var _v5 = function () {
 					var _v6 = model.r;
 					if (!_v6.$) {
@@ -5606,14 +5614,12 @@ var $author$project$Game$update = F2(
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			case 3:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{s: 0, n: $author$project$Explo$NoExplo}),
 					$elm$core$Platform$Cmd$none);
-			case 7:
+			case 6:
 				var q = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -5622,7 +5628,7 @@ var $author$project$Game$update = F2(
 							r: $elm$core$Maybe$Just(q)
 						}),
 					$elm$core$Platform$Cmd$none);
-			case 5:
+			case 4:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -5656,9 +5662,9 @@ var $author$project$Explo$monsterTypeToString = function (m) {
 		return 'Boar';
 	}
 };
-var $author$project$Game$EndQuestNoRewards = {$: 6};
-var $author$project$Game$EndQuestWithRewards = {$: 5};
-var $author$project$Game$StartBattle = {$: 4};
+var $author$project$Game$EndQuestNoRewards = {$: 5};
+var $author$project$Game$EndQuestWithRewards = {$: 4};
+var $author$project$Game$StartBattle = {$: 3};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
@@ -5914,7 +5920,7 @@ var $author$project$Game$viewDebug = function (model) {
 				', Explo acc: ' + $elm$core$String$fromFloat(model.s))
 			]));
 };
-var $author$project$Game$CancelExplo = {$: 3};
+var $author$project$Game$CancelExplo = {$: 2};
 var $author$project$Game$StartExplo = {$: 1};
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
@@ -6002,12 +6008,12 @@ var $author$project$Game$viewExploration = function (explo) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Exploration of ' + (zone.aL + ' is complete.'))
+						$elm$html$Html$text('Exploration of ' + (zone.aM + ' is complete.'))
 					]));
 	}
 };
 var $author$project$Game$SelectQuest = function (a) {
-	return {$: 7, a: a};
+	return {$: 6, a: a};
 };
 var $author$project$Game$viewQuest = function (q) {
 	return A2(
@@ -6034,7 +6040,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Experience: ' + $elm$core$String$fromInt(q.aE))
+						'Experience: ' + $elm$core$String$fromInt(q.aF))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6042,7 +6048,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Gold: ' + $elm$core$String$fromInt(q.aG))
+						'Gold: ' + $elm$core$String$fromInt(q.aH))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6133,6 +6139,6 @@ var $author$project$Game$view = function (model) {
 			]));
 };
 var $author$project$Game$main = $elm$browser$Browser$element(
-	{aJ: $author$project$Game$init, aQ: $author$project$Game$subscriptions, aS: $author$project$Game$update, aT: $author$project$Game$view});
+	{aK: $author$project$Game$init, aR: $author$project$Game$subscriptions, aT: $author$project$Game$update, aU: $author$project$Game$view});
 _Platform_export({'Game':{'init':$author$project$Game$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

@@ -12,12 +12,12 @@ type ExploState
 type alias Zone = 
     { name : String
     , explo_rate : Float
-    , monster_types : Int }
+    , monster_types : List MonsterType }
 
 exploTick = 10
 
-zone1 = Zone "Forest" 1 5
-zone2 = Zone "Mountains" 0.5 5
+zone1 = Zone "Forest" 1 [Boar, Wolf]
+zone2 = Zone "Mountains" 0.5 [Boar, Wolf]
 
 getAvailableZones = [zone1, zone2]
 

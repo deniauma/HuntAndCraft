@@ -8,6 +8,9 @@ import Html.Events exposing (onClick)
 import Explo exposing (..)
 import Battle exposing (..)
 
+type PlayerAction = Exploring
+    | Battling
+    | Idle
 
 type alias Model =
     { accumulator : Float 
@@ -16,7 +19,8 @@ type alias Model =
     , quests : List Quest
     , current_quest : Maybe Quest
     , battle : BattleState
-    , player_stats : FightingStats }
+    , player_stats : FightingStats
+    , player_action : PlayerAction }
 
 
 init _ =
@@ -26,13 +30,13 @@ init _ =
     , quests = [ createWolfQuest ]
     , current_quest = Nothing
     , battle = NoBattle
-    , player_stats = FightingStats 300 300 10 0 }, Cmd.none )
+    , player_stats = FightingStats 300 300 10 0
+    , player_action = Idle }, Cmd.none )
 
 
 type Msg
     = Frame Float
     | StartExplo
-    | ExploProgress
     | CancelExplo
     | StartBattle
     | EndQuestWithRewards
@@ -77,7 +81,6 @@ update msg model =
             in
                 ({ model | battle = PlayerTurn model.player_stats monster_stats, exploration = NoExplo, quests = new_quests }, Cmd.none)
         StartExplo -> ( { model | exploration = ExploInProgress zone1 0, explo_accumulator = 0, battle = NoBattle }, Cmd.none )
-        ExploProgress -> ( model, Cmd.none )
         CancelExplo -> ( { model | exploration = NoExplo, explo_accumulator = 0 }, Cmd.none )
         SelectQuest q -> ( { model | current_quest = Just q }, Cmd.none)
         EndQuestWithRewards -> ( { model | current_quest = Nothing }, Cmd.none )
