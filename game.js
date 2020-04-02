@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.T.I === region.Y.I)
+	if (region.U.J === region.Z.J)
 	{
-		return 'on line ' + region.T.I;
+		return 'on line ' + region.U.J;
 	}
-	return 'on lines ' + region.T.I + ' through ' + region.Y.I;
+	return 'on lines ' + region.U.J + ' through ' + region.Z.J;
 }
 
 
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		u: func(record.u),
-		U: record.U,
-		R: record.R
+		V: record.V,
+		S: record.S
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.u;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.U;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.V;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.S) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3968,7 +3968,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.aT,
 		impl.aR,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.S && impl.S(sendToApp)
+			var divertHrefToApp = impl.T && impl.T(sendToApp)
 			var view = impl.aU;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4043,7 +4043,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		S: function(sendToApp)
+		T: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4060,7 +4060,7 @@ function _Browser_application(impl)
 					sendToApp(onUrlRequest(
 						(next
 							&& curr.an === next.an
-							&& curr.ac === next.ac
+							&& curr.ad === next.ad
 							&& curr.ak.a === next.ak.a
 						)
 							? $elm$browser$Browser$Internal(next)
@@ -4237,7 +4237,7 @@ function _Browser_getViewport()
 			aw: _Browser_window.pageXOffset,
 			ax: _Browser_window.pageYOffset,
 			av: _Browser_doc.documentElement.clientWidth,
-			ab: _Browser_doc.documentElement.clientHeight
+			ac: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4248,7 +4248,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		av: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ab: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ac: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4273,13 +4273,13 @@ function _Browser_getViewportOf(id)
 		return {
 			ar: {
 				av: node.scrollWidth,
-				ab: node.scrollHeight
+				ac: node.scrollHeight
 			},
 			au: {
 				aw: node.scrollLeft,
 				ax: node.scrollTop,
 				av: node.clientWidth,
-				ab: node.clientHeight
+				ac: node.clientHeight
 			}
 		};
 	});
@@ -4314,13 +4314,13 @@ function _Browser_getElement(id)
 				aw: x,
 				ax: y,
 				av: _Browser_doc.documentElement.clientWidth,
-				ab: _Browser_doc.documentElement.clientHeight
+				ac: _Browser_doc.documentElement.clientHeight
 			},
 			aE: {
 				aw: x + rect.left,
 				ax: y + rect.top,
 				av: rect.width,
-				ab: rect.height
+				ac: rect.height
 			}
 		};
 	});
@@ -4859,7 +4859,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aa: fragment, ac: host, ah: path, ak: port_, an: protocol, ao: query};
+		return {ab: fragment, ad: host, ai: path, ak: port_, an: protocol, ao: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5140,7 +5140,7 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Battle$FightingStats = F4(
 	function (hp, max_hp, atk, def) {
-		return {O: atk, aC: def, t: hp, ae: max_hp};
+		return {P: atk, aC: def, t: hp, af: max_hp};
 	});
 var $author$project$Game$Idle = 2;
 var $author$project$Battle$NoBattle = {$: 0};
@@ -5156,13 +5156,13 @@ var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Game$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			C: 0,
+			H: 0,
 			g: $author$project$Battle$NoBattle,
-			r: $elm$core$Maybe$Nothing,
+			y: $elm$core$Maybe$Nothing,
 			s: 0,
-			n: $author$project$Explo$NoExplo,
-			aj: 2,
-			N: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
+			o: $author$project$Explo$NoExplo,
+			n: 2,
+			O: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
 			w: _List_fromArray(
 				[$author$project$Explo$createWolfQuest])
 		},
@@ -5176,7 +5176,7 @@ var $elm$browser$Browser$AnimationManager$Delta = function (a) {
 };
 var $elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {Q: oldTime, aq: request, as: subs};
+		return {R: oldTime, aq: request, as: subs};
 	});
 var $elm$browser$Browser$AnimationManager$init = $elm$core$Task$succeed(
 	A3($elm$browser$Browser$AnimationManager$State, _List_Nil, $elm$core$Maybe$Nothing, 0));
@@ -5188,7 +5188,7 @@ var $elm$core$Process$spawn = _Scheduler_spawn;
 var $elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _v0) {
 		var request = _v0.aq;
-		var oldTime = _v0.Q;
+		var oldTime = _v0.R;
 		var _v1 = _Utils_Tuple2(request, subs);
 		if (_v1.a.$ === 1) {
 			if (!_v1.b.b) {
@@ -5237,7 +5237,7 @@ var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _v0) {
 		var subs = _v0.as;
-		var oldTime = _v0.Q;
+		var oldTime = _v0.R;
 		var send = function (sub) {
 			if (!sub.$) {
 				var tagger = sub.a;
@@ -5306,10 +5306,12 @@ var $elm$browser$Browser$Events$onAnimationFrameDelta = $elm$browser$Browser$Ani
 var $author$project$Game$subscriptions = function (_v0) {
 	return $elm$browser$Browser$Events$onAnimationFrameDelta($author$project$Game$Frame);
 };
+var $author$project$Game$Battling = 1;
 var $author$project$Explo$ExploInProgress = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
 	});
+var $author$project$Game$Exploring = 0;
 var $author$project$Battle$PlayerTurn = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
@@ -5421,7 +5423,7 @@ var $author$project$Battle$updateFighterHP = F2(
 		return _Utils_update(
 			defender,
 			{
-				t: A2($elm$core$Basics$max, defender.t - attacker.O, 0)
+				t: A2($elm$core$Basics$max, defender.t - attacker.P, 0)
 			});
 	});
 var $author$project$Battle$updateBattle = F2(
@@ -5438,7 +5440,7 @@ var $author$project$Battle$updateBattle = F2(
 						var new_monster = _Utils_update(
 							monster,
 							{
-								t: A2($elm$core$Basics$max, monster.t - player.O, 0)
+								t: A2($elm$core$Basics$max, monster.t - player.P, 0)
 							});
 						if (!new_monster.t) {
 							var $temp$battle = A2($author$project$Battle$Win, player, new_monster),
@@ -5502,7 +5504,7 @@ var $author$project$Explo$updateExplo = F2(
 					var zone = explo.a;
 					var progress = explo.b;
 					if (_Utils_cmp(acc, $author$project$Explo$exploTick) > -1) {
-						var new_progress = A2($elm$core$Basics$min, progress + zone._, 100);
+						var new_progress = A2($elm$core$Basics$min, progress + zone.aa, 100);
 						if (new_progress === 100) {
 							return _Utils_Tuple2(
 								A2($author$project$Explo$ExploComplete, zone, $author$project$Explo$createWolfQuest),
@@ -5527,7 +5529,7 @@ var $author$project$Explo$updateExplo = F2(
 var $author$project$Explo$Boar = 1;
 var $author$project$Explo$Zone = F3(
 	function (name, explo_rate, monster_types) {
-		return {_: explo_rate, aL: monster_types, aM: name};
+		return {aa: explo_rate, aL: monster_types, aM: name};
 	});
 var $author$project$Explo$zone1 = A3(
 	$author$project$Explo$Zone,
@@ -5540,47 +5542,46 @@ var $author$project$Game$update = F2(
 		switch (msg.$) {
 			case 0:
 				var delta = msg.a;
-				var new_current_quest = function () {
-					var _v4 = model.g;
-					switch (_v4.$) {
-						case 3:
-							return $elm$core$Maybe$Nothing;
-						case 4:
-							return $elm$core$Maybe$Nothing;
-						default:
-							return model.r;
-					}
-				}();
-				var _v1 = A2($author$project$Explo$updateExplo, model.n, model.s + delta);
-				var new_explo = _v1.a;
-				var new_explo_acc = _v1.b;
-				var _v2 = A2($author$project$Battle$updateBattle, model.g, model.C + delta);
-				var new_battle = _v2.a;
-				var new_battle_acc = _v2.b;
-				if (new_explo.$ === 2) {
-					var z = new_explo.a;
-					var q = new_explo.b;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								C: new_battle_acc,
-								g: new_battle,
-								s: new_explo_acc,
-								n: A2($author$project$Explo$ExploInProgress, z, 0),
-								w: A2($author$project$Explo$addQuest, model.w, q)
-							}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{C: new_battle_acc, g: new_battle, s: new_explo_acc, n: new_explo}),
-						$elm$core$Platform$Cmd$none);
+				var _v1 = model.n;
+				switch (_v1) {
+					case 0:
+						var _v2 = A2($author$project$Explo$updateExplo, model.o, model.s + delta);
+						var new_explo = _v2.a;
+						var new_explo_acc = _v2.b;
+						if (new_explo.$ === 2) {
+							var z = new_explo.a;
+							var q = new_explo.b;
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										s: new_explo_acc,
+										o: A2($author$project$Explo$ExploInProgress, z, 0),
+										w: A2($author$project$Explo$addQuest, model.w, q)
+									}),
+								$elm$core$Platform$Cmd$none);
+						} else {
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{s: new_explo_acc, o: new_explo}),
+								$elm$core$Platform$Cmd$none);
+						}
+					case 1:
+						var _v4 = A2($author$project$Battle$updateBattle, model.g, model.H + delta);
+						var new_battle = _v4.a;
+						var new_battle_acc = _v4.b;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{H: new_battle_acc, g: new_battle}),
+							$elm$core$Platform$Cmd$none);
+					default:
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 3:
 				var _v5 = function () {
-					var _v6 = model.r;
+					var _v6 = model.y;
 					if (!_v6.$) {
 						var q = _v6.a;
 						return _Utils_Tuple2(
@@ -5598,8 +5599,9 @@ var $author$project$Game$update = F2(
 					_Utils_update(
 						model,
 						{
-							g: A2($author$project$Battle$PlayerTurn, model.N, monster_stats),
-							n: $author$project$Explo$NoExplo,
+							g: A2($author$project$Battle$PlayerTurn, model.O, monster_stats),
+							o: $author$project$Explo$NoExplo,
+							n: 1,
 							w: new_quests
 						}),
 					$elm$core$Platform$Cmd$none);
@@ -5610,14 +5612,15 @@ var $author$project$Game$update = F2(
 						{
 							g: $author$project$Battle$NoBattle,
 							s: 0,
-							n: A2($author$project$Explo$ExploInProgress, $author$project$Explo$zone1, 0)
+							o: A2($author$project$Explo$ExploInProgress, $author$project$Explo$zone1, 0),
+							n: 0
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{s: 0, n: $author$project$Explo$NoExplo}),
+						{s: 0, o: $author$project$Explo$NoExplo, n: 2}),
 					$elm$core$Platform$Cmd$none);
 			case 6:
 				var q = msg.a;
@@ -5625,20 +5628,20 @@ var $author$project$Game$update = F2(
 					_Utils_update(
 						model,
 						{
-							r: $elm$core$Maybe$Just(q)
+							y: $elm$core$Maybe$Just(q)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 4:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{r: $elm$core$Maybe$Nothing}),
+						{g: $author$project$Battle$NoBattle, y: $elm$core$Maybe$Nothing, n: 2}),
 					$elm$core$Platform$Cmd$none);
 			default:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{r: $elm$core$Maybe$Nothing}),
+						{g: $author$project$Battle$NoBattle, y: $elm$core$Maybe$Nothing, n: 2}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -5666,6 +5669,16 @@ var $author$project$Game$EndQuestNoRewards = {$: 5};
 var $author$project$Game$EndQuestWithRewards = {$: 4};
 var $author$project$Game$StartBattle = {$: 3};
 var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -5683,45 +5696,47 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $author$project$Game$viewBattleButtons = function (battle_state) {
-	switch (battle_state.$) {
-		case 0:
-			return A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Game$StartBattle)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Fight!')
-					]));
-		case 3:
-			return A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Game$EndQuestWithRewards)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('End quest and get rewards')
-					]));
-		case 4:
-			return A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Game$EndQuestNoRewards)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('End quest (no rewards)')
-					]));
-		default:
-			return $elm$html$Html$text('');
-	}
-};
+var $author$project$Game$viewBattleButtons = F2(
+	function (battle_state, player_action) {
+		switch (battle_state.$) {
+			case 0:
+				return A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick($author$project$Game$StartBattle),
+							$elm$html$Html$Attributes$disabled(player_action !== 2)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Fight!')
+						]));
+			case 3:
+				return A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick($author$project$Game$EndQuestWithRewards)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('End quest and get rewards')
+						]));
+			case 4:
+				return A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick($author$project$Game$EndQuestNoRewards)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('End quest (no rewards)')
+						]));
+			default:
+				return $elm$html$Html$text('');
+		}
+	});
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Game$viewMonsterLife = F2(
@@ -5744,7 +5759,7 @@ var $author$project$Game$viewMonsterLife = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.ae)))
+							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.af)))
 						]))
 				]));
 	});
@@ -5832,30 +5847,31 @@ var $author$project$Game$viewPlayerStats = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.ae)))
+							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.af)))
 						]))
 				]));
 	});
-var $author$project$Game$viewBattle = function (model) {
-	var _v0 = model.r;
-	if (_v0.$ === 1) {
-		return A2($elm$html$Html$div, _List_Nil, _List_Nil);
-	} else {
-		var quest = _v0.a;
-		return A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2($author$project$Game$viewPlayerStats, model.N, model.g),
-					A2(
-					$author$project$Game$viewMonsterStats,
-					model.g,
-					$author$project$Explo$monsterTypeToString(quest.k)),
-					$author$project$Game$viewBattleButtons(model.g)
-				]));
-	}
-};
+var $author$project$Game$viewBattle = F2(
+	function (model, player_action) {
+		var _v0 = model.y;
+		if (_v0.$ === 1) {
+			return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+		} else {
+			var quest = _v0.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2($author$project$Game$viewPlayerStats, model.O, model.g),
+						A2(
+						$author$project$Game$viewMonsterStats,
+						model.g,
+						$author$project$Explo$monsterTypeToString(quest.k)),
+						A2($author$project$Game$viewBattleButtons, model.g, player_action)
+					]));
+		}
+	});
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$Game$viewDebug = function (model) {
 	return A2(
@@ -5915,7 +5931,7 @@ var $author$project$Game$viewDebug = function (model) {
 				}
 			}(),
 				$elm$html$Html$text(
-				'battle acc: ' + $elm$core$String$fromFloat(model.C)),
+				'battle acc: ' + $elm$core$String$fromFloat(model.H)),
 				$elm$html$Html$text(
 				', Explo acc: ' + $elm$core$String$fromFloat(model.s))
 			]));
@@ -5926,92 +5942,94 @@ var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $author$project$Game$viewExploration = function (explo) {
-	switch (explo.$) {
-		case 1:
-			var progress = explo.b;
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$p,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Progress ... '),
-								A2(
-								$elm$html$Html$span,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										$elm$core$String$fromFloat(progress) + '%')
-									])),
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('progress')
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$div,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('progress-current'),
-												A2(
-												$elm$html$Html$Attributes$style,
-												'width',
-												$elm$core$String$fromFloat(progress) + '%')
-											]),
-										_List_Nil)
-									])),
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Game$CancelExplo)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Cancel')
-									]))
-							]))
-					]));
-		case 0:
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('No exploration in progress.'),
-						A2($elm$html$Html$br, _List_Nil, _List_Nil),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Game$StartExplo)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Start exploring')
-							]))
-					]));
-		default:
-			var zone = explo.a;
-			var q = explo.b;
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Exploration of ' + (zone.aM + ' is complete.'))
-					]));
-	}
-};
+var $author$project$Game$viewExploration = F2(
+	function (explo, player_action) {
+		switch (explo.$) {
+			case 1:
+				var progress = explo.b;
+				return A2(
+					$elm$html$Html$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Progress ... '),
+									A2(
+									$elm$html$Html$span,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											$elm$core$String$fromFloat(progress) + '%')
+										])),
+									A2(
+									$elm$html$Html$div,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('progress')
+										]),
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$div,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('progress-current'),
+													A2(
+													$elm$html$Html$Attributes$style,
+													'width',
+													$elm$core$String$fromFloat(progress) + '%')
+												]),
+											_List_Nil)
+										])),
+									A2(
+									$elm$html$Html$button,
+									_List_fromArray(
+										[
+											$elm$html$Html$Events$onClick($author$project$Game$CancelExplo)
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Cancel')
+										]))
+								]))
+						]));
+			case 0:
+				return A2(
+					$elm$html$Html$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('No exploration in progress.'),
+							A2($elm$html$Html$br, _List_Nil, _List_Nil),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick($author$project$Game$StartExplo),
+									$elm$html$Html$Attributes$disabled(player_action !== 2)
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Start exploring')
+								]))
+						]));
+			default:
+				var zone = explo.a;
+				var q = explo.b;
+				return A2(
+					$elm$html$Html$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Exploration of ' + (zone.aM + ' is complete.'))
+						]));
+		}
+	});
 var $author$project$Game$SelectQuest = function (a) {
 	return {$: 6, a: a};
 };
@@ -6107,7 +6125,7 @@ var $author$project$Game$view = function (model) {
 							[
 								$elm$html$Html$text('Exploration')
 							])),
-						$author$project$Game$viewExploration(model.n)
+						A2($author$project$Game$viewExploration, model.o, model.n)
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -6124,7 +6142,7 @@ var $author$project$Game$view = function (model) {
 							[
 								$elm$html$Html$text('Battle')
 							])),
-						$author$project$Game$viewBattle(model)
+						A2($author$project$Game$viewBattle, model, model.n)
 					])),
 				A2(
 				$elm$html$Html$div,
