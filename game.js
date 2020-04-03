@@ -5228,13 +5228,6 @@ var $author$project$Battle$FightingStats = F4(
 var $author$project$Game$Idle = 2;
 var $author$project$Battle$NoBattle = {$: 0};
 var $author$project$Explo$NoExplo = {$: 0};
-var $author$project$Explo$Forest = 0;
-var $author$project$Explo$Quest = F5(
-	function (monster_type, biome, remaining, exp, gold) {
-		return {J: biome, aG: exp, aI: gold, k: monster_type, E: remaining};
-	});
-var $author$project$Explo$Wolf = 0;
-var $author$project$Explo$createWolfQuest = A5($author$project$Explo$Quest, 0, 0, 1, 10, 50);
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Game$init = function (_v0) {
@@ -5247,8 +5240,7 @@ var $author$project$Game$init = function (_v0) {
 			o: $author$project$Explo$NoExplo,
 			n: 2,
 			P: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
-			w: _List_fromArray(
-				[$author$project$Explo$createWolfQuest])
+			w: _List_Nil
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5399,6 +5391,7 @@ var $author$project$Explo$ExploInProgress = F2(
 		return {$: 1, a: a, b: b};
 	});
 var $author$project$Game$Exploring = 0;
+var $author$project$Explo$Forest = 0;
 var $author$project$Battle$PlayerTurn = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
@@ -5449,6 +5442,11 @@ var $author$project$Explo$addQuest = F2(
 	});
 var $author$project$Explo$Boar = 1;
 var $author$project$Explo$BrownBear = 2;
+var $author$project$Explo$Quest = F5(
+	function (monster_type, biome, remaining, exp, gold) {
+		return {J: biome, aG: exp, aI: gold, k: monster_type, E: remaining};
+	});
+var $author$project$Explo$Wolf = 0;
 var $elm$random$Random$Generator = $elm$core$Basics$identity;
 var $elm$random$Random$map = F2(
 	function (func, _v0) {
@@ -5962,16 +5960,7 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Explo$monsterTypeToString = function (m) {
-	switch (m) {
-		case 0:
-			return 'Wolf';
-		case 1:
-			return 'Boar';
-		default:
-			return 'Brown bear';
-	}
-};
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $author$project$Game$EndQuestNoRewards = {$: 5};
 var $author$project$Game$EndQuestWithRewards = {$: 4};
 var $author$project$Game$StartBattle = {$: 3};
@@ -6044,13 +6033,29 @@ var $author$project$Game$viewBattleButtons = F2(
 				return $elm$html$Html$text('');
 		}
 	});
+var $author$project$Explo$monsterTypeToString = function (m) {
+	switch (m) {
+		case 0:
+			return 'Wolf';
+		case 1:
+			return 'Boar';
+		default:
+			return 'Brown bear';
+	}
+};
+var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $author$project$Game$viewMonsterLife = F2(
 	function (m, name) {
 		return A2(
 			$elm$html$Html$div,
-			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('battle-fighter')
+				]),
 			_List_fromArray(
 				[
 					A2(
@@ -6067,26 +6072,61 @@ var $author$project$Game$viewMonsterLife = F2(
 						[
 							$elm$html$Html$text(
 							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.ag)))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('progress')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('progress-current lifebar'),
+									A2(
+									$elm$html$Html$Attributes$style,
+									'width',
+									$elm$core$String$fromFloat((m.t / m.ag) * 100) + '%')
+								]),
+							_List_Nil)
 						]))
 				]));
 	});
 var $author$project$Game$viewMonsterStats = F2(
-	function (state, name) {
+	function (state, quest) {
 		switch (state.$) {
 			case 0:
-				return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+				return A2(
+					$author$project$Game$viewMonsterLife,
+					$author$project$Explo$getMonsterStats(quest),
+					$author$project$Explo$monsterTypeToString(quest.k));
 			case 1:
 				var m = state.b;
-				return A2($author$project$Game$viewMonsterLife, m, name);
+				return A2(
+					$author$project$Game$viewMonsterLife,
+					m,
+					$author$project$Explo$monsterTypeToString(quest.k));
 			case 2:
 				var m = state.b;
-				return A2($author$project$Game$viewMonsterLife, m, name);
+				return A2(
+					$author$project$Game$viewMonsterLife,
+					m,
+					$author$project$Explo$monsterTypeToString(quest.k));
 			case 3:
 				var m = state.b;
-				return A2($author$project$Game$viewMonsterLife, m, name);
+				return A2(
+					$author$project$Game$viewMonsterLife,
+					m,
+					$author$project$Explo$monsterTypeToString(quest.k));
 			default:
 				var m = state.b;
-				return A2($author$project$Game$viewMonsterLife, m, name);
+				return A2(
+					$author$project$Game$viewMonsterLife,
+					m,
+					$author$project$Explo$monsterTypeToString(quest.k));
 		}
 	});
 var $author$project$Game$viewBattleOutcome = function (battle_state) {
@@ -6135,9 +6175,13 @@ var $author$project$Game$viewPlayerStats = F2(
 					return player.t;
 			}
 		}();
+		var hp_percent = $elm$core$String$fromFloat((current_hp / player.ag) * 100) + '%';
 		return A2(
 			$elm$html$Html$div,
-			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('battle-fighter')
+				]),
 			_List_fromArray(
 				[
 					A2(
@@ -6155,6 +6199,23 @@ var $author$project$Game$viewPlayerStats = F2(
 						[
 							$elm$html$Html$text(
 							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.ag)))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('progress')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('progress-current lifebar'),
+									A2($elm$html$Html$Attributes$style, 'width', hp_percent)
+								]),
+							_List_Nil)
 						]))
 				]));
 	});
@@ -6170,16 +6231,21 @@ var $author$project$Game$viewBattle = F2(
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2($author$project$Game$viewPlayerStats, model.P, model.g),
 						A2(
-						$author$project$Game$viewMonsterStats,
-						model.g,
-						$author$project$Explo$monsterTypeToString(quest.k)),
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('battle-stats')
+							]),
+						_List_fromArray(
+							[
+								A2($author$project$Game$viewPlayerStats, model.P, model.g),
+								A2($author$project$Game$viewMonsterStats, model.g, quest)
+							])),
 						A2($author$project$Game$viewBattleButtons, model.g, player_action)
 					]));
 		}
 	});
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $author$project$Game$viewDebug = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6246,9 +6312,6 @@ var $author$project$Game$viewDebug = function (model) {
 var $author$project$Game$CancelExplo = {$: 2};
 var $author$project$Game$StartExplo = {$: 1};
 var $elm$html$Html$br = _VirtualDom_node('br');
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $author$project$Game$viewExploration = F2(
 	function (explo, player_action) {
 		switch (explo.$) {
@@ -6381,7 +6444,8 @@ var $author$project$Game$viewQuest = function (q) {
 					[
 						$elm$html$Html$text(
 						'Remaining: ' + $elm$core$String$fromInt(q.E))
-					]))
+					])),
+				A2($elm$html$Html$br, _List_Nil, _List_Nil)
 			]));
 };
 var $author$project$Game$viewQuests = function (quests) {

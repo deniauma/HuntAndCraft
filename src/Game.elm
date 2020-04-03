@@ -28,7 +28,7 @@ init _ =
     ( { accumulator = 0 
     , explo_accumulator = 0
     , exploration = NoExplo
-    , quests = [ createWolfQuest ]
+    , quests = []
     , current_quest = Nothing
     , battle = NoBattle
     , player_stats = FightingStats 300 300 10 0
@@ -129,6 +129,7 @@ viewQuest q =
         , p [] [ text ("Experience: " ++ String.fromInt q.exp) ]
         , p [] [ text ("Gold: " ++ String.fromInt q.gold) ]
         , p [] [ text ("Remaining: " ++ String.fromInt q.remaining) ]
+        , br [][]
         ]
 
 viewQuests : List Quest -> Html Msg
@@ -140,25 +141,28 @@ viewBattle model player_action =
     case model.current_quest of
         Nothing -> div [][]
         Just quest -> div [] 
-                        [ viewPlayerStats model.player_stats model.battle
-                        , viewMonsterStats model.battle (monsterTypeToString quest.monster_type)
+                        [ div [ class "battle-stats" ] [ 
+                            viewPlayerStats model.player_stats model.battle
+                            , viewMonsterStats model.battle (quest)
+                            ]
                         , viewBattleButtons model.battle player_action
                         ]
 
-viewMonsterStats : BattleState -> String -> Html Msg
-viewMonsterStats state name =
+viewMonsterStats : BattleState -> Quest -> Html Msg
+viewMonsterStats state quest =
     case state of
-        NoBattle -> div [][]
-        PlayerTurn _ m -> viewMonsterLife m name
-        MonsterTurn _ m -> viewMonsterLife m name
-        Win _ m -> viewMonsterLife m name
-        Lose _ m -> viewMonsterLife m name
+        NoBattle -> viewMonsterLife (getMonsterStats quest) (monsterTypeToString quest.monster_type)
+        PlayerTurn _ m -> viewMonsterLife m (monsterTypeToString quest.monster_type)
+        MonsterTurn _ m -> viewMonsterLife m (monsterTypeToString quest.monster_type)
+        Win _ m -> viewMonsterLife m (monsterTypeToString quest.monster_type)
+        Lose _ m -> viewMonsterLife m (monsterTypeToString quest.monster_type)
 
 viewMonsterLife : FightingStats -> String -> Html Msg
 viewMonsterLife m name =
-    div []
+    div [ class "battle-fighter" ]
         [ p [] [ text name ]
         , span [] [ text (String.fromInt m.hp ++ "/" ++ String.fromInt m.max_hp) ]
+        , div [ class "progress" ] [ div [ class "progress-current lifebar", style "width" (String.fromFloat (toFloat m.hp / toFloat m.max_hp * 100) ++ "%") ] [] ]
         ]
 
 viewPlayerStats : FightingStats -> BattleState -> Html Msg
@@ -170,9 +174,12 @@ viewPlayerStats player battle_state =
             Win p m -> p.hp
             Lose p m -> p.hp
             _ -> player.hp
+        hp_percent = String.fromFloat (toFloat current_hp / toFloat player.max_hp * 100) ++ "%"
     in  
-        div []
-            [ p [] [ text "Player", viewBattleOutcome battle_state ], span [] [ text (String.fromInt current_hp ++ "/" ++ String.fromInt player.max_hp) ]
+        div [ class "battle-fighter" ]
+            [ p [] [ text "Player", viewBattleOutcome battle_state ]
+            , span [] [ text (String.fromInt current_hp ++ "/" ++ String.fromInt player.max_hp) ]
+            , div [ class "progress" ] [ div [ class "progress-current lifebar", style "width" hp_percent ] [] ]
             ]
 
 viewBattleOutcome : BattleState -> Html Msg
