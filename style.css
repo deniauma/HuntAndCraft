@@ -18,10 +18,16 @@ body {
 
 #explo {
 	grid-area: explo;
+	text-align: center;
 }
 
 #battle {
 	grid-area: battle;
+	text-align: center;
+}
+
+#gear {
+	grid-area: gear;
 	
 }
 
@@ -31,14 +37,14 @@ body {
 
 #game {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: 30vh 30vh 30vh 10vh;
 	grid-template-areas: 
-		"quests explo explo"
-		"quests battle battle"
-		"quests battle battle"
-		"debug debug debug"
-
+		"quests explo explo gear"
+		"quests battle battle gear"
+		"quests battle battle gear"
+		"debug debug debug debug";
+	justify-items: center;
 }
 
 .progress {
@@ -58,8 +64,14 @@ body {
 
 .battle-fighter {
 	margin-right: 20px; 
+	margin-left: 20px;
 }
 
 .lifebar {
 	background-color: green;
+}
+
+.equips {
+	display: flex;
+	flex-direction: column;
 }

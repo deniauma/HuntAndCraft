@@ -90,15 +90,15 @@ decrementQuest quest monster_type =
 
 addQuest : List Quest -> Quest -> List Quest
 addQuest quests q = 
-    if (List.any (\x -> x.monster_type == q.monster_type) quests) then
+    if List.any (\x -> x.monster_type == q.monster_type) quests then
         List.map (\x -> incrementQuest x q.monster_type) quests
-    else (quests ++ [q])
+    else quests ++ [q]
 
 removeQuest : List Quest -> Quest -> List Quest
 removeQuest quests q =
     let
         new_quests = 
-            if (List.any (\x -> x.monster_type == q.monster_type) quests) then
+            if List.any (\x -> x.monster_type == q.monster_type) quests then
                 List.map (\x -> decrementQuest x q.monster_type) quests
             else quests
     in

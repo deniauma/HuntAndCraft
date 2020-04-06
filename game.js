@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.V.K === region._.K)
+	if (region.Y.L === region.ac.L)
 	{
-		return 'on line ' + region.V.K;
+		return 'on line ' + region.Y.L;
 	}
-	return 'on lines ' + region.V.K + ' through ' + region._.K;
+	return 'on lines ' + region.Y.L + ' through ' + region.ac.L;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aP,
+		impl.aZ,
+		impl.aX,
 		function() { return function() {} }
 	);
 });
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		u: func(record.u),
-		W: record.W,
-		T: record.T
+		Z: record.Z,
+		W: record.W
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.u;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.W;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Z;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.T) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.W) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aP,
+		impl.aZ,
+		impl.aX,
 		function(sendToApp, initialModel) {
-			var view = impl.aU;
+			var view = impl.a_;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aP,
+		impl.aZ,
+		impl.aX,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.U && impl.U(sendToApp)
-			var view = impl.aU;
+			var divertHrefToApp = impl.X && impl.X(sendToApp)
+			var view = impl.a_;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aB);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aE);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
+				(title !== doc.aY) && (_VirtualDom_doc.title = title = doc.aY);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aN;
-	var onUrlRequest = impl.aO;
+	var onUrlChange = impl.aS;
+	var onUrlRequest = impl.aT;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		U: function(sendToApp)
+		X: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ao === next.ao
-							&& curr.ae === next.ae
-							&& curr.al.a === next.al.a
+							&& curr.ar === next.ar
+							&& curr.ah === next.ah
+							&& curr.ao.a === next.ao.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aL: function(flags)
+		aP: function(flags)
 		{
-			return A3(impl.aL, flags, _Browser_getUrl(), key);
+			return A3(impl.aP, flags, _Browser_getUrl(), key);
 		},
-		aU: impl.aU,
-		aT: impl.aT,
-		aR: impl.aR
+		a_: impl.a_,
+		aZ: impl.aZ,
+		aX: impl.aX
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aJ: 'hidden', aC: 'visibilitychange' }
+		? { aN: 'hidden', aF: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aJ: 'mozHidden', aC: 'mozvisibilitychange' }
+		? { aN: 'mozHidden', aF: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aJ: 'msHidden', aC: 'msvisibilitychange' }
+		? { aN: 'msHidden', aF: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aJ: 'webkitHidden', aC: 'webkitvisibilitychange' }
-		: { aJ: 'hidden', aC: 'visibilitychange' };
+		? { aN: 'webkitHidden', aF: 'webkitvisibilitychange' }
+		: { aN: 'hidden', aF: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		as: _Browser_getScene(),
-		av: {
-			ax: _Browser_window.pageXOffset,
-			ay: _Browser_window.pageYOffset,
-			aw: _Browser_doc.documentElement.clientWidth,
-			ad: _Browser_doc.documentElement.clientHeight
+		av: _Browser_getScene(),
+		ay: {
+			aA: _Browser_window.pageXOffset,
+			aB: _Browser_window.pageYOffset,
+			az: _Browser_doc.documentElement.clientWidth,
+			ag: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aw: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ad: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		az: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ag: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			as: {
-				aw: node.scrollWidth,
-				ad: node.scrollHeight
-			},
 			av: {
-				ax: node.scrollLeft,
-				ay: node.scrollTop,
-				aw: node.clientWidth,
-				ad: node.clientHeight
+				az: node.scrollWidth,
+				ag: node.scrollHeight
+			},
+			ay: {
+				aA: node.scrollLeft,
+				aB: node.scrollTop,
+				az: node.clientWidth,
+				ag: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			as: _Browser_getScene(),
-			av: {
-				ax: x,
-				ay: y,
-				aw: _Browser_doc.documentElement.clientWidth,
-				ad: _Browser_doc.documentElement.clientHeight
+			av: _Browser_getScene(),
+			ay: {
+				aA: x,
+				aB: y,
+				az: _Browser_doc.documentElement.clientWidth,
+				ag: _Browser_doc.documentElement.clientHeight
 			},
-			aF: {
-				ax: x + rect.left,
-				ay: y + rect.top,
-				aw: rect.width,
-				ad: rect.height
+			aI: {
+				aA: x + rect.left,
+				aB: y + rect.top,
+				az: rect.width,
+				ag: rect.height
 			}
 		};
 	});
@@ -4942,7 +4942,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ac: fragment, ae: host, aj: path, al: port_, ao: protocol, ap: query};
+		return {af: fragment, ah: host, am: path, ao: port_, ar: protocol, as: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5223,23 +5223,185 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Battle$FightingStats = F4(
 	function (hp, max_hp, atk, def) {
-		return {Q: atk, aD: def, t: hp, ag: max_hp};
+		return {R: atk, aG: def, t: hp, aj: max_hp};
 	});
 var $author$project$Game$Idle = 2;
 var $author$project$Battle$NoBattle = {$: 0};
 var $author$project$Explo$NoExplo = {$: 0};
+var $author$project$Inventory$Inventory = F2(
+	function (next_id, equips) {
+		return {z: equips, U: next_id};
+	});
+var $author$project$Equip$Equip = F4(
+	function (kind, name, stats, equipped) {
+		return {aJ: equipped, aQ: kind, aR: name, aW: stats};
+	});
+var $author$project$Equip$Head = 1;
+var $author$project$Equip$createHelmet = F2(
+	function (name, stats) {
+		return A4($author$project$Equip$Equip, 1, name, stats, false);
+	});
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Dict$Black = 1;
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = 0;
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Basics$compare = _Utils_compare;
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1) {
+				case 0:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $author$project$Inventory$newForTest = A2(
+	$author$project$Inventory$Inventory,
+	3,
+	$elm$core$Dict$fromList(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				0,
+				A2(
+					$author$project$Equip$createHelmet,
+					'Helmet (test)',
+					A4($author$project$Battle$FightingStats, 10, 10, 0, 5))),
+				_Utils_Tuple2(
+				1,
+				A2(
+					$author$project$Equip$createHelmet,
+					'Helmet2 (test)',
+					A4($author$project$Battle$FightingStats, 10, 10, 0, 5))),
+				_Utils_Tuple2(
+				2,
+				A2(
+					$author$project$Equip$createHelmet,
+					'Helmet3 (test)',
+					A4($author$project$Battle$FightingStats, 10, 10, 0, 5)))
+			])));
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Game$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
-			H: 0,
+			I: 0,
 			g: $author$project$Battle$NoBattle,
 			y: $elm$core$Maybe$Nothing,
 			s: 0,
 			o: $author$project$Explo$NoExplo,
+			S: $author$project$Inventory$newForTest,
 			n: 2,
-			P: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
+			Q: A4($author$project$Battle$FightingStats, 300, 300, 10, 0),
 			w: _List_Nil
 		},
 		$elm$core$Platform$Cmd$none);
@@ -5252,7 +5414,7 @@ var $elm$browser$Browser$AnimationManager$Delta = function (a) {
 };
 var $elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {S: oldTime, ar: request, at: subs};
+		return {V: oldTime, au: request, aw: subs};
 	});
 var $elm$browser$Browser$AnimationManager$init = $elm$core$Task$succeed(
 	A3($elm$browser$Browser$AnimationManager$State, _List_Nil, $elm$core$Maybe$Nothing, 0));
@@ -5263,8 +5425,8 @@ var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$core$Process$spawn = _Scheduler_spawn;
 var $elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _v0) {
-		var request = _v0.ar;
-		var oldTime = _v0.S;
+		var request = _v0.au;
+		var oldTime = _v0.V;
 		var _v1 = _Utils_Tuple2(request, subs);
 		if (_v1.a.$ === 1) {
 			if (!_v1.b.b) {
@@ -5312,8 +5474,8 @@ var $elm$time$Time$Posix = $elm$core$Basics$identity;
 var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _v0) {
-		var subs = _v0.at;
-		var oldTime = _v0.S;
+		var subs = _v0.aw;
+		var oldTime = _v0.V;
 		var send = function (sub) {
 			if (!sub.$) {
 				var tagger = sub.a;
@@ -5421,7 +5583,7 @@ var $author$project$Explo$incrementQuest = F2(
 	function (quest, monster_type) {
 		return _Utils_eq(quest.k, monster_type) ? _Utils_update(
 			quest,
-			{E: quest.E + 1}) : quest;
+			{F: quest.F + 1}) : quest;
 	});
 var $author$project$Explo$addQuest = F2(
 	function (quests, q) {
@@ -5444,7 +5606,7 @@ var $author$project$Explo$Boar = 1;
 var $author$project$Explo$BrownBear = 2;
 var $author$project$Explo$Quest = F5(
 	function (monster_type, biome, remaining, exp, gold) {
-		return {J: biome, aG: exp, aI: gold, k: monster_type, E: remaining};
+		return {K: biome, aK: exp, aM: gold, k: monster_type, F: remaining};
 	});
 var $author$project$Explo$Wolf = 0;
 var $elm$random$Random$Generator = $elm$core$Basics$identity;
@@ -5543,12 +5705,12 @@ var $elm$random$Random$weighted = F2(
 			A2($elm$random$Random$float, 0, total));
 	});
 var $author$project$Explo$createQuestFromZone = function (zone) {
-	var _v0 = zone.J;
+	var _v0 = zone.K;
 	if (!_v0) {
 		return A2(
 			$elm$random$Random$map,
 			function (x) {
-				return A5($author$project$Explo$Quest, x, zone.J, 1, 10, 50);
+				return A5($author$project$Explo$Quest, x, zone.K, 1, 10, 50);
 			},
 			A2(
 				$elm$random$Random$weighted,
@@ -5562,7 +5724,7 @@ var $author$project$Explo$createQuestFromZone = function (zone) {
 		return A2(
 			$elm$random$Random$map,
 			function (x) {
-				return A5($author$project$Explo$Quest, x, zone.J, 1, 10, 50);
+				return A5($author$project$Explo$Quest, x, zone.K, 1, 10, 50);
 			},
 			A2(
 				$elm$random$Random$weighted,
@@ -5661,7 +5823,7 @@ var $author$project$Explo$getMonsterStats = function (q) {
 var $author$project$Explo$Mountains = 1;
 var $author$project$Explo$Zone = F3(
 	function (name, biome, explo_rate) {
-		return {J: biome, ab: explo_rate, aM: name};
+		return {K: biome, ae: explo_rate, aR: name};
 	});
 var $author$project$Explo$getZonefromBiome = function (biome) {
 	if (!biome) {
@@ -5674,7 +5836,7 @@ var $author$project$Explo$decrementQuest = F2(
 	function (quest, monster_type) {
 		return _Utils_eq(quest.k, monster_type) ? _Utils_update(
 			quest,
-			{E: quest.E - 1}) : quest;
+			{F: quest.F - 1}) : quest;
 	});
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
@@ -5703,7 +5865,7 @@ var $author$project$Explo$removeQuest = F2(
 		return A2(
 			$elm$core$List$filter,
 			function (x) {
-				return x.E > 0;
+				return x.F > 0;
 			},
 			new_quests);
 	});
@@ -5725,7 +5887,7 @@ var $author$project$Battle$updateFighterHP = F2(
 		return _Utils_update(
 			defender,
 			{
-				t: A2($elm$core$Basics$max, defender.t - attacker.Q, 0)
+				t: A2($elm$core$Basics$max, defender.t - attacker.R, 0)
 			});
 	});
 var $author$project$Battle$updateBattle = F2(
@@ -5742,7 +5904,7 @@ var $author$project$Battle$updateBattle = F2(
 						var new_monster = _Utils_update(
 							monster,
 							{
-								t: A2($elm$core$Basics$max, monster.t - player.Q, 0)
+								t: A2($elm$core$Basics$max, monster.t - player.R, 0)
 							});
 						if (!new_monster.t) {
 							var $temp$battle = A2($author$project$Battle$Win, player, new_monster),
@@ -5805,7 +5967,7 @@ var $author$project$Explo$updateExplo = F2(
 					var zone = explo.a;
 					var progress = explo.b;
 					if (_Utils_cmp(acc, $author$project$Explo$exploTick) > -1) {
-						var new_progress = A2($elm$core$Basics$min, progress + zone.ab, 100);
+						var new_progress = A2($elm$core$Basics$min, progress + zone.ae, 100);
 						if (new_progress === 100) {
 							return _Utils_Tuple2(
 								$author$project$Explo$ExploComplete(zone),
@@ -5853,13 +6015,13 @@ var $author$project$Game$update = F2(
 								$elm$core$Platform$Cmd$none);
 						}
 					case 1:
-						var _v4 = A2($author$project$Battle$updateBattle, model.g, model.H + delta);
+						var _v4 = A2($author$project$Battle$updateBattle, model.g, model.I + delta);
 						var new_battle = _v4.a;
 						var new_battle_acc = _v4.b;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{H: new_battle_acc, g: new_battle}),
+								{I: new_battle_acc, g: new_battle}),
 							$elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -5884,7 +6046,7 @@ var $author$project$Game$update = F2(
 					_Utils_update(
 						model,
 						{
-							g: A2($author$project$Battle$PlayerTurn, model.P, monster_stats),
+							g: A2($author$project$Battle$PlayerTurn, model.Q, monster_stats),
 							o: $author$project$Explo$NoExplo,
 							n: 1,
 							w: new_quests
@@ -5940,7 +6102,7 @@ var $author$project$Game$update = F2(
 							s: 0,
 							o: A2(
 								$author$project$Explo$ExploInProgress,
-								$author$project$Explo$getZonefromBiome(q.J),
+								$author$project$Explo$getZonefromBiome(q.K),
 								0),
 							w: A2($author$project$Explo$addQuest, model.w, q)
 						}),
@@ -6071,7 +6233,7 @@ var $author$project$Game$viewMonsterLife = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.ag)))
+							$elm$core$String$fromInt(m.t) + ('/' + $elm$core$String$fromInt(m.aj)))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -6089,7 +6251,7 @@ var $author$project$Game$viewMonsterLife = F2(
 									A2(
 									$elm$html$Html$Attributes$style,
 									'width',
-									$elm$core$String$fromFloat((m.t / m.ag) * 100) + '%')
+									$elm$core$String$fromFloat((m.t / m.aj) * 100) + '%')
 								]),
 							_List_Nil)
 						]))
@@ -6157,25 +6319,21 @@ var $author$project$Game$viewPlayerStats = F2(
 			switch (battle_state.$) {
 				case 1:
 					var p = battle_state.a;
-					var m = battle_state.b;
 					return p.t;
 				case 2:
 					var p = battle_state.a;
-					var m = battle_state.b;
 					return p.t;
 				case 3:
 					var p = battle_state.a;
-					var m = battle_state.b;
 					return p.t;
 				case 4:
 					var p = battle_state.a;
-					var m = battle_state.b;
 					return p.t;
 				default:
 					return player.t;
 			}
 		}();
-		var hp_percent = $elm$core$String$fromFloat((current_hp / player.ag) * 100) + '%';
+		var hp_percent = $elm$core$String$fromFloat((current_hp / player.aj) * 100) + '%';
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -6198,7 +6356,7 @@ var $author$project$Game$viewPlayerStats = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.ag)))
+							$elm$core$String$fromInt(current_hp) + ('/' + $elm$core$String$fromInt(player.aj)))
 						])),
 					A2(
 					$elm$html$Html$div,
@@ -6239,13 +6397,31 @@ var $author$project$Game$viewBattle = F2(
 							]),
 						_List_fromArray(
 							[
-								A2($author$project$Game$viewPlayerStats, model.P, model.g),
+								A2($author$project$Game$viewPlayerStats, model.Q, model.g),
 								A2($author$project$Game$viewMonsterStats, model.g, quest)
 							])),
 						A2($author$project$Game$viewBattleButtons, model.g, player_action)
 					]));
 		}
 	});
+var $author$project$Inventory$getAllEquips = function (inventory) {
+	return $elm$core$Dict$toList(inventory.z);
+};
+var $author$project$Game$viewEquip = function (_v0) {
+	var eq_id = _v0.a;
+	var equip = _v0.b;
+	return A2(
+		$elm$html$Html$span,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id(
+				$elm$core$String$fromInt(eq_id))
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text(equip.aR)
+			]));
+};
 var $author$project$Game$viewDebug = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6304,11 +6480,107 @@ var $author$project$Game$viewDebug = function (model) {
 				}
 			}(),
 				$elm$html$Html$text(
-				'battle acc: ' + $elm$core$String$fromFloat(model.H)),
+				'battle acc: ' + $elm$core$String$fromFloat(model.I)),
 				$elm$html$Html$text(
-				', Explo acc: ' + $elm$core$String$fromFloat(model.s))
+				', Explo acc: ' + $elm$core$String$fromFloat(model.s)),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				A2(
+					$elm$core$List$map,
+					$author$project$Game$viewEquip,
+					$author$project$Inventory$getAllEquips(model.S)))
 			]));
 };
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$html$Html$select = _VirtualDom_node('select');
+var $author$project$Game$viewEquipment = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('equips')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Weapon')
+						]))
+				])),
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Head')
+						]))
+				])),
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Arms')
+						]))
+				])),
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Chest')
+						]))
+				])),
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Waist')
+						]))
+				])),
+			A2(
+			$elm$html$Html$select,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$option,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Legs')
+						]))
+				]))
+		]));
 var $author$project$Game$CancelExplo = {$: 2};
 var $author$project$Game$StartExplo = {$: 1};
 var $elm$html$Html$br = _VirtualDom_node('br');
@@ -6395,7 +6667,7 @@ var $author$project$Game$viewExploration = F2(
 					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$html$Html$text('Exploration of ' + (zone.aM + ' is complete.'))
+							$elm$html$Html$text('Exploration of ' + (zone.aR + ' is complete.'))
 						]));
 		}
 	});
@@ -6427,7 +6699,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Experience: ' + $elm$core$String$fromInt(q.aG))
+						'Experience: ' + $elm$core$String$fromInt(q.aK))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6435,7 +6707,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Gold: ' + $elm$core$String$fromInt(q.aI))
+						'Gold: ' + $elm$core$String$fromInt(q.aM))
 					])),
 				A2(
 				$elm$html$Html$p,
@@ -6443,7 +6715,7 @@ var $author$project$Game$viewQuest = function (q) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Remaining: ' + $elm$core$String$fromInt(q.E))
+						'Remaining: ' + $elm$core$String$fromInt(q.F))
 					])),
 				A2($elm$html$Html$br, _List_Nil, _List_Nil)
 			]));
@@ -6518,6 +6790,23 @@ var $author$project$Game$view = function (model) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
+						$elm$html$Html$Attributes$id('gear')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h2,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Equipment')
+							])),
+						$author$project$Game$viewEquipment
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
 						$elm$html$Html$Attributes$id('debug')
 					]),
 				_List_fromArray(
@@ -6527,6 +6816,6 @@ var $author$project$Game$view = function (model) {
 			]));
 };
 var $author$project$Game$main = $elm$browser$Browser$element(
-	{aL: $author$project$Game$init, aR: $author$project$Game$subscriptions, aT: $author$project$Game$update, aU: $author$project$Game$view});
+	{aP: $author$project$Game$init, aX: $author$project$Game$subscriptions, aZ: $author$project$Game$update, a_: $author$project$Game$view});
 _Platform_export({'Game':{'init':$author$project$Game$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

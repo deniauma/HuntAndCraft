@@ -2,12 +2,14 @@ module Game exposing (main)
 
 import Browser
 import Browser.Events exposing (onAnimationFrameDelta)
-import Html exposing (Html, button, div, text, h2, h3, span, p, br)
+import Html exposing (Html, button, div, text, h2, h3, span, p, br, select, option)
 import Html.Attributes exposing (id, class, style, disabled)
 import Html.Events exposing (onClick)
 import Random
 import Explo exposing (..)
 import Battle exposing (..)
+import Equip exposing (Equip)
+import Inventory exposing (Inventory)
 
 type PlayerAction = Exploring
     | Battling
@@ -21,7 +23,8 @@ type alias Model =
     , current_quest : Maybe Quest
     , battle : BattleState
     , player_stats : FightingStats
-    , player_action : PlayerAction }
+    , player_action : PlayerAction
+    , inventory : Inventory }
 
 
 init _ =
@@ -32,7 +35,8 @@ init _ =
     , current_quest = Nothing
     , battle = NoBattle
     , player_stats = FightingStats 300 300 10 0
-    , player_action = Idle }, Cmd.none )
+    , player_action = Idle
+    , inventory = Inventory.newForTest }, Cmd.none )
 
 
 type Msg
@@ -48,10 +52,6 @@ type Msg
 
 subscriptions _ =
     onAnimationFrameDelta Frame
-
-
-exploTick = 100
-battleTick = 500
 
 
 update msg model =
@@ -77,7 +77,7 @@ update msg model =
         StartBattle -> 
             let
                 (new_quests, monster_stats) = case model.current_quest of
-                    Just q -> ((removeQuest model.quests q), (getMonsterStats q)) 
+                    Just q -> (removeQuest model.quests q, getMonsterStats q) 
                     Nothing -> (model.quests, FightingStats 200 200 20 0)
             in
                 ({ model | battle = PlayerTurn model.player_stats monster_stats
@@ -98,6 +98,7 @@ update msg model =
 
 
 
+view : Model -> Html Msg
 view model =
     div [ id "game"]
         [ div [ id "quests"]  [ h2 [] [ text "Quests" ], viewQuests model.quests ]
@@ -105,6 +106,7 @@ view model =
         , div [ id "battle" ] [ h2 [] [ text "Battle" ]
             , viewBattle model model.player_action
             ]
+        , div [ id "gear"] [ h2 [] [ text "Equipment" ], viewEquipment ]
         , div [ id "debug" ] [ viewDebug model ]
         ]
 
@@ -143,7 +145,7 @@ viewBattle model player_action =
         Just quest -> div [] 
                         [ div [ class "battle-stats" ] [ 
                             viewPlayerStats model.player_stats model.battle
-                            , viewMonsterStats model.battle (quest)
+                            , viewMonsterStats model.battle quest
                             ]
                         , viewBattleButtons model.battle player_action
                         ]
@@ -169,10 +171,10 @@ viewPlayerStats : FightingStats -> BattleState -> Html Msg
 viewPlayerStats player battle_state =
     let
         current_hp = case battle_state of
-            PlayerTurn p m -> p.hp
-            MonsterTurn p m -> p.hp
-            Win p m -> p.hp
-            Lose p m -> p.hp
+            PlayerTurn p _ -> p.hp
+            MonsterTurn p _ -> p.hp
+            Win p _ -> p.hp
+            Lose p _ -> p.hp
             _ -> player.hp
         hp_percent = String.fromFloat (toFloat current_hp / toFloat player.max_hp * 100) ++ "%"
     in  
@@ -197,6 +199,22 @@ viewBattleButtons battle_state player_action =
         Lose _ _ -> button [ onClick EndQuestNoRewards ] [ text "End quest (no rewards)" ] 
         _ -> text ""
 
+viewEquipment : Html Msg
+viewEquipment =
+    div [ class "equips" ] 
+        [ select [] [ option [] [ text "Weapon" ] ]
+        , select [] [ option [] [ text "Head" ] ]
+        , select [] [ option [] [ text "Arms" ] ]
+        , select [] [ option [] [ text "Chest" ] ]
+        , select [] [ option [] [ text "Waist" ] ]
+        , select [] [ option [] [ text "Legs" ] ]
+        ]
+
+viewEquipForType : Inventory -> Html Msg
+viewEquipForType inventory =
+    div [] []
+
+
 viewDebug : Model -> Html Msg
 viewDebug model =
     div [] [ 
@@ -206,7 +224,15 @@ viewDebug model =
             MonsterTurn p m -> div [] [ text ("Monster turn: current player HP = " ++ String.fromInt p.hp ++ ", current monster HP = " ++ String.fromInt m.hp) ]
             Win _ _ -> div [] [ text "Win" ] 
             Lose _ _ -> div [] [ text "Lose" ] 
-    , text ("battle acc: " ++ String.fromFloat model.accumulator), text (", Explo acc: " ++ String.fromFloat model.explo_accumulator) ]
+    , text ("battle acc: " ++ String.fromFloat model.accumulator), text (", Explo acc: " ++ String.fromFloat model.explo_accumulator)
+    , div [] (model.inventory 
+        |> Inventory.getAllEquips 
+        |> List.map viewEquip)
+    ]
+
+viewEquip : (Int, Equip) -> Html Msg
+viewEquip (eq_id, equip) =
+    span [ id (String.fromInt eq_id) ] [ text equip.name ]
 
 main : Program () Model Msg
 main =
